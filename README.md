@@ -1,14 +1,7 @@
-# Project
+# G3J Learn Semantic Kernel (Korean)
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+G3J Learn Semantic Kernel 시리즈에서 사용하는 샘플 코드를 제공합니다.
 
-As the maintainer of this project, please make a few updates:
-
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
 
 ## Contributing
 
