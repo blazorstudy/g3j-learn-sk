@@ -16,9 +16,9 @@ builder.Services.AddSingleton<Kernel>(sp =>
     var config = sp.GetRequiredService<IConfiguration>();
     var kernel = Kernel.CreateBuilder()
                        .AddAzureOpenAIChatCompletion(
-                           deploymentName: config["OpenAI:DeploymentName"]!,
                            endpoint: config["OpenAI:Endpoint"]!,
-                           apiKey: config["OpenAI:ApiKey"]!)
+                           apiKey: config["OpenAI:ApiKey"]!,
+                           deploymentName: config["OpenAI:DeploymentName"]!)
                        .Build();
     return kernel;
 });

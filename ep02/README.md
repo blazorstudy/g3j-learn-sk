@@ -14,3 +14,27 @@
 📜 자료: https://aka.ms/g3jlearnsk
 
 #g3jlearnsk #semantickernel #ai #intelligentapps
+
+## Demo 1
+
+### 프로젝트 빌드하기
+
+```bash
+dotnet restore demo01.sln && dotnet build demo01.sln
+```
+
+### 콘솔 앱에서 Semantic Kernel 사용하기
+
+```bash
+dotnet run --project ./demo01.consoleapp
+```
+
+### ASP.NET Core Web API 앱에서 Semantic Kernel 사용하기
+
+```bash
+dotnet watch run --project ./demo01.apiapp
+```
+
+## Demo 2
+
+TBD
