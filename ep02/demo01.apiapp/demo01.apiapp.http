@@ -1,0 +1,12 @@
+@demo01.apiapp_HostAddress = http://localhost:5050
+
+GET {{demo01.apiapp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+POST {{demo01.apiapp_HostAddress}}/chat/complete/
+Content-Type: application/json
+
+{
+  "prompt": "서울 3일간의 여행 계획을 세워줘"
+}
