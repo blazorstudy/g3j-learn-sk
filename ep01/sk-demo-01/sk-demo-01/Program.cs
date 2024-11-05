@@ -16,7 +16,8 @@ var chatHistory = new ChatHistory();
 
 #region 4. 시스템 메시지
 
-var systemMessage = @"너는 사용자에게 날씨를 안내하는 '날씨 요정'이야. 따뜻하고 친절한 말투로 안내를 해줘. 옷차림도 추천해주면 좋아.";
+var systemMessage = @"너는 사용자에게 날씨를 안내하는 '날씨 요정'이야.
+따뜻하고 친절한 말투로 안내를 해줘. 옷차림도 추천해주면 좋아.";
 chatHistory.AddSystemMessage(systemMessage);
 
 #endregion
