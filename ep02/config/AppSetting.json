@@ -1,0 +1,6 @@
+{
+  "AzureOpenAIEndpoint": "azure-oepn-ai-endpoint",
+  "AzureOpenAIApiKey": "azure-oepn-ai-api-key",
+  "GoogleGeminiKey": "google-gemini-key",
+  "HuggingFacePhiApiKey": "huggingface-key"
+}
