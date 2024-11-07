@@ -6,6 +6,7 @@ public class Settings
     public string AzureOpenAIApiKey { get; set; }
     public string GoogleGeminiKey { get; set; }
     public string HuggingFacePhiApiKey { get; set; }
+    public string GitHubPAT { get; set; }
 
     public static Settings LoadFromFile()
     {
