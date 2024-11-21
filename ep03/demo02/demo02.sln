@@ -1,0 +1,51 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo02.AppHost", "demo02.AppHost\demo02.AppHost.csproj", "{89882D26-9623-49FB-99E5-54376DD80255}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo02.ServiceDefaults", "demo02.ServiceDefaults\demo02.ServiceDefaults.csproj", "{D94EAD49-E107-401F-9819-5F1B2ED2D7AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo02.ApiService", "demo02.ApiService\demo02.ApiService.csproj", "{0420B2DE-DF8C-4FCF-B3EF-583B8BEFCDC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo02.Web", "demo02.Web\demo02.Web.csproj", "{8BA652AB-42CB-40C2-9AA1-084504B2CE8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo02.NativePlugin", "demo02.NativePlugin\demo02.NativePlugin.csproj", "{3A772CEB-94F9-4CE1-838E-1238E84F39E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "demo02.OpenApiPlugin", "demo02.OpenApiPlugin\demo02.OpenApiPlugin.csproj", "{91C98BF6-BDA0-47D3-B78B-C2640A49A8D3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89882D26-9623-49FB-99E5-54376DD80255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89882D26-9623-49FB-99E5-54376DD80255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89882D26-9623-49FB-99E5-54376DD80255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89882D26-9623-49FB-99E5-54376DD80255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D94EAD49-E107-401F-9819-5F1B2ED2D7AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D94EAD49-E107-401F-9819-5F1B2ED2D7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D94EAD49-E107-401F-9819-5F1B2ED2D7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D94EAD49-E107-401F-9819-5F1B2ED2D7AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0420B2DE-DF8C-4FCF-B3EF-583B8BEFCDC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0420B2DE-DF8C-4FCF-B3EF-583B8BEFCDC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0420B2DE-DF8C-4FCF-B3EF-583B8BEFCDC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0420B2DE-DF8C-4FCF-B3EF-583B8BEFCDC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BA652AB-42CB-40C2-9AA1-084504B2CE8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BA652AB-42CB-40C2-9AA1-084504B2CE8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BA652AB-42CB-40C2-9AA1-084504B2CE8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BA652AB-42CB-40C2-9AA1-084504B2CE8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A772CEB-94F9-4CE1-838E-1238E84F39E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A772CEB-94F9-4CE1-838E-1238E84F39E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A772CEB-94F9-4CE1-838E-1238E84F39E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A772CEB-94F9-4CE1-838E-1238E84F39E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C98BF6-BDA0-47D3-B78B-C2640A49A8D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C98BF6-BDA0-47D3-B78B-C2640A49A8D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C98BF6-BDA0-47D3-B78B-C2640A49A8D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C98BF6-BDA0-47D3-B78B-C2640A49A8D3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
