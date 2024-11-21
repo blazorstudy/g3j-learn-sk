@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "Recommends food list to the user based on history",
+  "execution_settings": {
+    "default": {
+      "max_tokens": 1000,
+      "temperature": 0
+    }
+  },
+  "input_variables": [
+    {
+      "name": "history",
+      "description": "Food history about the user",
+      "required": true
+    },
+    {
+      "name": "foodCategory",
+      "description": "The food category by user hopeful",
+      "required": true
+    }
+  ]
+}
