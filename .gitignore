@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 
 # projects
 appsettings.Development.json
+Database.*
