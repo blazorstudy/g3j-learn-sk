@@ -11,5 +11,7 @@ Microsoft의 오픈 소스 프로젝트인 Semantic Kernel 프로젝트(시맨�
 
 등에 대해 얘기합니다.
 
-🎙️ 진행: 김진석, 박구삼, 유저스틴, 이종인
-📜 자료: https://aka.ms/g3jlearnsk
+- 🎙️ 진행: 김진석, 박구삼, 유저스틴, 이종인
+- 📜 자료: https://aka.ms/g3jlearnsk
+
+#g3jlearnsk #semantickernel #ai #intelligentapps

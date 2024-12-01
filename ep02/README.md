@@ -10,7 +10,7 @@
 
 등에 대해 알아보겠습니다.
 
-🎙️ 진행: 유저스틴, 이종인
-📜 자료: https://aka.ms/g3jlearnsk
+- 🎙️ 진행: 유저스틴, 이종인
+- 📜 자료: https://aka.ms/g3jlearnsk
 
 #g3jlearnsk #semantickernel #ai #intelligentapps
