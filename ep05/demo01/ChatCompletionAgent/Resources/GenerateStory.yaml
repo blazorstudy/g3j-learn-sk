@@ -1,0 +1,17 @@
+﻿name: GenerateStory
+template: |
+  {{$topic}}에 대한 이야기를 {{$length}} 문장 길이로 작성하세요.
+template_format: semantic-kernel
+description: 주제에 대한 이야기를 생성하는 기능입니다.
+input_variables:
+  - name: topic
+    description: 이야기의 주제.
+    is_required: true
+  - name: length
+    description: 이야기의 문장 수입니다.
+    is_required: true
+output_variable:
+  description: 생성된 이야기.
+execution_settings:
+  default:
+    temperature: 0.6
