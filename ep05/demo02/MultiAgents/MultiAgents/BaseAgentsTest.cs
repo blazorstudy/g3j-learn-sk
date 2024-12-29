@@ -167,7 +167,6 @@ namespace MultiAgents
                           "modelname",
                           "endpoint",
                           "apikey");
-
             return builder.Build();
         }
 

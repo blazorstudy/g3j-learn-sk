@@ -1,4 +1,4 @@
-using System.ComponentModel;
+ï»¿using System.ComponentModel;
 
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Chat;
@@ -34,7 +34,7 @@ namespace MultiAgents
         [Fact]
         public async Task UseKernelFunctionStrategiesWithJsonResultAsync()
         {
-            // ¿¡ÀÌÀüÆ®¸¦ Á¤ÀÇÇÕ´Ï´Ù.
+            // ì—ì´ì „íŠ¸ë¥¼ ì •ì˜í•©ë‹ˆë‹¤.
             ChatCompletionAgent agent =
                 new()
                 {
@@ -43,25 +43,25 @@ namespace MultiAgents
                     Kernel = this.CreateKernelWithChatCompletion(),
                 };
 
-            // ¿¡ÀÌÀüÆ® »óÈ£ÀÛ¿ëÀ» À§ÇÑ Ã¤ÆÃÀ» »ı¼ºÇÕ´Ï´Ù.
+            // ì—ì´ì „íŠ¸ ìƒí˜¸ì‘ìš©ì„ ìœ„í•œ ì±„íŒ…ì„ ìƒì„±í•©ë‹ˆë‹¤.
             AgentGroupChat chat =
                 new()
                 {
                     ExecutionSettings =
                         new()
                         {
-                            // ¿©±â¼­ TerminationStrategy ÇÏÀ§ Å¬·¡½º´Â ÀÀ´ä¿¡ Á¡¼ö°¡ 70 ÀÌ»óÀÎ °æ¿ì Á¾·áµË´Ï´Ù.
+                            // ì—¬ê¸°ì„œ TerminationStrategy í•˜ìœ„ í´ë˜ìŠ¤ëŠ” ì‘ë‹µì— ì ìˆ˜ê°€ 70 ì´ìƒì¸ ê²½ìš° ì¢…ë£Œë©ë‹ˆë‹¤.
                             TerminationStrategy = new ThresholdTerminationStrategy()
                         }
                 };
 
-            // »ç¿ëÀÚ ÀÔ·Â¿¡ ÀÀ´äÇÕ´Ï´Ù.
-            await InvokeAgentAsync("¹Ù¶÷ÀÌ ºÖ´Ï´Ù.");
-            await InvokeAgentAsync("¹Ù¶÷ÀÌ ³ª¹« »çÀÌ·Î ºÒ¾î¿É´Ï´Ù.");
-            await InvokeAgentAsync("¹Ù¶÷ÀÌ ³ª¹« »çÀÌ·Î ºÒ¾î¿Í ÀÙ»ç±ÍµéÀÌ ÃãÀ» Ãßµí Èçµé¸³´Ï´Ù.");
+            // ì‚¬ìš©ì ì…ë ¥ì— ì‘ë‹µí•©ë‹ˆë‹¤.
+            await InvokeAgentAsync("ë°”ëŒì´ ë¶‘ë‹ˆë‹¤.");
+            await InvokeAgentAsync("ë°”ëŒì´ ë‚˜ë¬´ ì‚¬ì´ë¡œ ë¶ˆì–´ì˜µë‹ˆë‹¤.");
+            await InvokeAgentAsync("ë°”ëŒì´ ë‚˜ë¬´ ì‚¬ì´ë¡œ ë¶ˆì–´ì™€ ìì‚¬ê·€ë“¤ì´ ì¶¤ì„ ì¶”ë“¯ í”ë“¤ë¦½ë‹ˆë‹¤.");
             
 
-            // ¿¡ÀÌÀüÆ®¸¦ È£ÃâÇÏ°í ´ëÈ­ ¸Ş½ÃÁö¸¦ Ç¥½Ã
+            // ì—ì´ì „íŠ¸ë¥¼ í˜¸ì¶œí•˜ê³  ëŒ€í™” ë©”ì‹œì§€ë¥¼ í‘œì‹œ
             async Task InvokeAgentAsync(string input)
             {
                 ChatMessageContent message = new(AuthorRole.User, input);

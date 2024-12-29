@@ -1,4 +1,4 @@
-using System.ComponentModel;
+ï»¿using System.ComponentModel;
 
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
@@ -20,29 +20,29 @@ namespace MultiAgents
         private const string ReviewerName = "MenuReviewer";
         private const string ReviewerInstructions =
             """
-            ³Ê´Â ¸Ş´º °³¹ßÀÚ°¡ °³¹ßÇÑ ¸Ş´º¸¦ ¸®ºäÇÏ´Â ¸Ş´º¸®ºä¾îÀÔ´Ï´Ù.
-            ³Ê´Â »õ·Î¿î ¸Ş´º°¡ ½Ä´çÀÇ ÀÌ¹ÌÁö¿Í Àß ¾î¿ï¸®´ÂÁö ÆÇ´ÜÇÏ´Â °ÍÀÌ ¸ñÇ¥ÀÔ´Ï´Ù.
-            ÀûÇÕÇÏ´Ù¸é ÇØ´ç ¸Ş´º°¡ ½ÂÀÎµÇ¾ú´Ù°í ¹İµå½Ã ¸í½ÃÀûÀ¸·Î ¸»ÇÏ°í ´ÙÀ½ »õ·Î¿î ¸Ş´º¸¦ Á¦¾ÈÇØ ´Ş¶ó°í ÇÏ¼¼¿ä.
-            ±×·¸Áö ¾Ê´Ù¸é ¿¹½Ã ¾øÀÌ °³¼± ¹æ¹ı¿¡ ´ëÇÑ ÀÎ»çÀÌÆ®¸¦ Á¦°øÇÏ¼¼¿ä.
-            ½ÂÀÎÀ» ÇÏ¸é Áö±İ±îÁö ½ÂÀÎµÈ ¸Ş´ºµéÀ» Á¤¸®ÇØ¼­ Á¦°øÇÏ¼¼¿ä.
+            ë„ˆëŠ” ë©”ë‰´ ê°œë°œìê°€ ê°œë°œí•œ ë©”ë‰´ë¥¼ ë¦¬ë·°í•˜ëŠ” ë©”ë‰´ë¦¬ë·°ì–´ì…ë‹ˆë‹¤.
+            ë„ˆëŠ” ìƒˆë¡œìš´ ë©”ë‰´ê°€ ì‹ë‹¹ì˜ ì´ë¯¸ì§€ì™€ ì˜ ì–´ìš¸ë¦¬ëŠ”ì§€ íŒë‹¨í•˜ëŠ” ê²ƒì´ ëª©í‘œì…ë‹ˆë‹¤.
+            ì í•©í•˜ë‹¤ë©´ í•´ë‹¹ ë©”ë‰´ê°€ ìŠ¹ì¸ë˜ì—ˆë‹¤ê³  ë°˜ë“œì‹œ ëª…ì‹œì ìœ¼ë¡œ ë§í•˜ê³  ë‹¤ìŒ ìƒˆë¡œìš´ ë©”ë‰´ë¥¼ ì œì•ˆí•´ ë‹¬ë¼ê³  í•˜ì„¸ìš”.
+            ê·¸ë ‡ì§€ ì•Šë‹¤ë©´ ì˜ˆì‹œ ì—†ì´ ê°œì„  ë°©ë²•ì— ëŒ€í•œ ì¸ì‚¬ì´íŠ¸ë¥¼ ì œê³µí•˜ì„¸ìš”.
+            ìŠ¹ì¸ì„ í•˜ë©´ ì§€ê¸ˆê¹Œì§€ ìŠ¹ì¸ëœ ë©”ë‰´ë“¤ì„ ì •ë¦¬í•´ì„œ ì œê³µí•˜ì„¸ìš”.
             """;
 
         private const string MenuDeveloperName = "MenuDeveloper";
         private const string MenuDeveloperInstructions =
             """
-            ³Ê´Â ½Ä´ç¿¡°Ô ½Ä´çÀÇ »óÈ², Æ¯»ö¿¡ ¸Â°Ô ÃÖ¼±ÀÇ ¸Ş´º¸¦ °³¹ßÇÏ´Â ¸Ş´º °³¹ßÀÚÀÔ´Ï´Ù.
-            ³Ê´Â °í°´ÀÌ ÁÁ¾ÆÇÒ ¸¸ÇÑ »õ·Î¿î À½½ÄÀ» »ı°¢ÇØ³À´Ï´Ù.
-            ³Ê´Â ½Ä´çÀÇ ºĞÀ§±â¿Í °í°´ÀÇ ÃëÇâ¿¡ ¸Â°Ô ´Ù¾çÇÑ À½½ÄÀ» Á¶ÇÕÇÏ¿© ¸Ş´º¸¦ ±¸¼ºÇÕ´Ï´Ù.
-            ÇÑ ¹ø¿¡ ÇÏ³ªÀÇ ¸Ş´º¸¸ Á¦°øÇÕ´Ï´Ù.
-            ÇöÀç ¸ñÇ¥¿¡ ÁıÁßÇÕ´Ï´Ù.
-            ¾µµ¥¾ø´Â Àâ´ãÀ¸·Î ½Ã°£À» ³¶ºñÇÏÁö ¾Ê½À´Ï´Ù.
-            ¾ÆÀÌµğ¾î¸¦ °³¼±ÇÒ ¶§ Á¦¾ÈÀ» °í·ÁÇÕ´Ï´Ù.
+            ë„ˆëŠ” ì‹ë‹¹ì—ê²Œ ì‹ë‹¹ì˜ ìƒí™©, íŠ¹ìƒ‰ì— ë§ê²Œ ìµœì„ ì˜ ë©”ë‰´ë¥¼ ê°œë°œí•˜ëŠ” ë©”ë‰´ ê°œë°œìì…ë‹ˆë‹¤.
+            ë„ˆëŠ” ê³ ê°ì´ ì¢‹ì•„í•  ë§Œí•œ ìƒˆë¡œìš´ ìŒì‹ì„ ìƒê°í•´ëƒ…ë‹ˆë‹¤.
+            ë„ˆëŠ” ì‹ë‹¹ì˜ ë¶„ìœ„ê¸°ì™€ ê³ ê°ì˜ ì·¨í–¥ì— ë§ê²Œ ë‹¤ì–‘í•œ ìŒì‹ì„ ì¡°í•©í•˜ì—¬ ë©”ë‰´ë¥¼ êµ¬ì„±í•©ë‹ˆë‹¤.
+            í•œ ë²ˆì— í•˜ë‚˜ì˜ ë©”ë‰´ë§Œ ì œê³µí•©ë‹ˆë‹¤.
+            í˜„ì¬ ëª©í‘œì— ì§‘ì¤‘í•©ë‹ˆë‹¤.
+            ì“¸ë°ì—†ëŠ” ì¡ë‹´ìœ¼ë¡œ ì‹œê°„ì„ ë‚­ë¹„í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+            ì•„ì´ë””ì–´ë¥¼ ê°œì„ í•  ë•Œ ì œì•ˆì„ ê³ ë ¤í•©ë‹ˆë‹¤.
             """;
 
         [Fact]
         public async Task UseKernelFunctionStrategiesWithAgentGroupChatAsync()
         {
-            // ¿¡ÀÌÀüÆ® Á¤ÀÇ
+            // ì—ì´ì „íŠ¸ ì •ì˜
             ChatCompletionAgent agentReviewer =
                 new()
                 {
@@ -62,10 +62,10 @@ namespace MultiAgents
             KernelFunction terminationFunction =
                 AgentGroupChat.CreatePromptFunctionForStrategy(
                     $$$"""
-                    {{{ReviewerName}}}°¡ 3°³ È¤Àº ±× ÀÌ»óÀ» ½ÂÀÎÇßÀ¸¸é `yes`¶ó´Â ÇÑ ´Ü¾î¸¸À» ¸®ÅÏÇÏ¼¼¿ä.
-                    ±×·¸Áö ¾ÊÀ¸¸é no¸¦ ¸®ÅÏÇÏ¼¼¿ä.
+                    {{{ReviewerName}}}ê°€ 3íšŒ í˜¹ì€ ê·¸ ì´ìƒ ìŠ¹ì¸í–ˆìœ¼ë©´ `yes`ë¼ëŠ” í•œ ë‹¨ì–´ë§Œì„ ë¦¬í„´í•˜ì„¸ìš”.
+                    ê·¸ë ‡ì§€ ì•Šìœ¼ë©´ noë¥¼ ë¦¬í„´í•˜ì„¸ìš”.
 
-                    È÷½ºÅä¸®:
+                    íˆìŠ¤í† ë¦¬:
                     {{$history}}
                     """,
                     safeParameterNames: "history");
@@ -73,66 +73,66 @@ namespace MultiAgents
             KernelFunction selectionFunction =
                 AgentGroupChat.CreatePromptFunctionForStrategy(
                     $$$"""
-                    ´ëÈ­¿¡¼­ °¡Àå ÃÖ±Ù Âü°¡ÀÚ¸¦ ±âÁØÀ¸·Î ´ÙÀ½ Â÷·Ê¸¦ Á¤ÇÏ¼¼¿ä.
-                    ´ÙÀ½ Â÷·ÊÀÇ Âü°¡ÀÚ ÀÌ¸§¸¸ ¸í½ÃÇÏ¼¼¿ä.
-                    ¾î¶² Âü°¡ÀÚµµ ¿¬¼ÓÀ¸·Î µÎ ¹ø ÀÌ»ó Â÷·Ê¸¦ °¡Áú ¼ö ¾ø½À´Ï´Ù.
+                    ëŒ€í™”ì—ì„œ ê°€ì¥ ìµœê·¼ ì°¸ê°€ìë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë‹¤ìŒ ì°¨ë¡€ë¥¼ ì •í•˜ì„¸ìš”.
+                    ë‹¤ìŒ ì°¨ë¡€ì˜ ì°¸ê°€ì ì´ë¦„ë§Œ ëª…ì‹œí•˜ì„¸ìš”.
+                    ì–´ë–¤ ì°¸ê°€ìë„ ì—°ì†ìœ¼ë¡œ ë‘ ë²ˆ ì´ìƒ ì°¨ë¡€ë¥¼ ê°€ì§ˆ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.
                     
-                    ´ÙÀ½ Âü°¡ÀÚ Áß¿¡¼­¸¸ ¼±ÅÃÇÏ¼¼¿ä:
+                    ë‹¤ìŒ ì°¸ê°€ì ì¤‘ì—ì„œë§Œ ì„ íƒí•˜ì„¸ìš”:
                     - {{{ReviewerName}}}
                     - {{{MenuDeveloperName}}}
                     
-                    ´ÙÀ½ ±ÔÄ¢À» Ç×»ó µû¸£¼¼¿ä:
-                    - {{{MenuDeveloperName}}} ´ÙÀ½¿¡´Â {{{ReviewerName}}}ÀÇ Â÷·ÊÀÔ´Ï´Ù.
-                    - {{{ReviewerName}}} ´ÙÀ½¿¡´Â {{{MenuDeveloperName}}}ÀÇ Â÷·ÊÀÔ´Ï´Ù.
+                    ë‹¤ìŒ ê·œì¹™ì„ í•­ìƒ ë”°ë¥´ì„¸ìš”:
+                    - {{{MenuDeveloperName}}} ë‹¤ìŒì—ëŠ” {{{ReviewerName}}}ì˜ ì°¨ë¡€ì…ë‹ˆë‹¤.
+                    - {{{ReviewerName}}} ë‹¤ìŒì—ëŠ” {{{MenuDeveloperName}}}ì˜ ì°¨ë¡€ì…ë‹ˆë‹¤.
 
-                    È÷½ºÅä¸®:
+                    íˆìŠ¤í† ë¦¬:
                     {{$history}}
                     """,
                     safeParameterNames: "history");
 
-            // ¼±ÅÃ ¹× Á¾·á¿¡ »ç¿ëµÇ´Â È÷½ºÅä¸®¸¦ °¡Àå ÃÖ±Ù ¸Ş½ÃÁö·Î Á¦ÇÑ
+            // ì„ íƒ ë° ì¢…ë£Œì— ì‚¬ìš©ë˜ëŠ” íˆìŠ¤í† ë¦¬ë¥¼ ê°€ì¥ ìµœê·¼ ë©”ì‹œì§€ë¡œ ì œí•œ
             ChatHistoryTruncationReducer strategyReducer = new(1);
 
-            // ¿¡ÀÌÀüÆ® »óÈ£ÀÛ¿ëÀ» À§ÇÑ Ã¤ÆÃ »ı¼º
+            // ì—ì´ì „íŠ¸ ìƒí˜¸ì‘ìš©ì„ ìœ„í•œ ì±„íŒ… ìƒì„±
             AgentGroupChat chat =
                 new(agentDeveloper, agentReviewer)
                 {
                     ExecutionSettings =
                         new()
                         {
-                            // ¿©±â¼­ KernelFunctionTerminationStrategy´Â ¸Ş´º ¸®ºä¾î°¡ ½ÂÀÎÀ» ÇßÀ» ¶§ Á¾·áµË´Ï´Ù.
+                            // ì—¬ê¸°ì„œ KernelFunctionTerminationStrategyëŠ” ë©”ë‰´ ë¦¬ë·°ì–´ê°€ ìŠ¹ì¸ì„ í–ˆì„ ë•Œ ì¢…ë£Œë©ë‹ˆë‹¤.
                             TerminationStrategy =
                                 new KernelFunctionTerminationStrategy(terminationFunction, CreateKernelWithChatCompletion())
                                 {
-                                    // ¿ÀÁ÷ ¸Ş´º ¸®ºä¾î¸¸ ½ÂÀÎÇÒ ¼ö ÀÖ½À´Ï´Ù.
+                                    // ì˜¤ì§ ë©”ë‰´ ë¦¬ë·°ì–´ë§Œ ìŠ¹ì¸í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
                                     Agents = [agentReviewer],
-                                    // ÀÀ´äÀÌ "yes"ÀÎÁö È®ÀÎÇÏ´Â »ç¿ëÀÚ Á¤ÀÇ °á°ú ÆÄ½Ì
+                                    // ì‘ë‹µì´ "yes"ì¸ì§€ í™•ì¸í•˜ëŠ” ì‚¬ìš©ì ì •ì˜ ê²°ê³¼ íŒŒì‹±
                                     ResultParser = (result) => result.GetValue<string>()?.Contains("yes", StringComparison.OrdinalIgnoreCase) ?? false,
-                                    // È÷½ºÅä¸® ÀÎ¼ö¿¡ ´ëÇÑ ÇÁ·ÒÇÁÆ® º¯¼ö ÀÌ¸§
+                                    // íˆìŠ¤í† ë¦¬ ì¸ìˆ˜ì— ëŒ€í•œ í”„ë¡¬í”„íŠ¸ ë³€ìˆ˜ ì´ë¦„
                                     HistoryVariableName = "history",
-                                    // ÃÑ ÅÏ ¼ö Á¦ÇÑ
+                                    // ì´ í„´ ìˆ˜ ì œí•œ
                                     MaximumIterations = 10,
-                                    // ÇÁ·ÒÇÁÆ®¿¡ ÀüÃ¼ È÷½ºÅä¸®¸¦ Æ÷ÇÔÇÏÁö ¾ÊÀ½À¸·Î½á ÅäÅ« Àı¾à
+                                    // í”„ë¡¬í”„íŠ¸ì— ì „ì²´ íˆìŠ¤í† ë¦¬ë¥¼ í¬í•¨í•˜ì§€ ì•ŠìŒìœ¼ë¡œì¨ í† í° ì ˆì•½
                                     HistoryReducer = strategyReducer,
                                 },
-                            // ¿©±â¼­ KernelFunctionSelectionStrategy´Â ÇÁ·ÒÇÁÆ® ÇÔ¼ö¿¡ ±â¹İÇÏ¿© ¿¡ÀÌÀüÆ®¸¦ ¼±ÅÃÇÕ´Ï´Ù.
+                            // ì—¬ê¸°ì„œ KernelFunctionSelectionStrategyëŠ” í”„ë¡¬í”„íŠ¸ í•¨ìˆ˜ì— ê¸°ë°˜í•˜ì—¬ ì—ì´ì „íŠ¸ë¥¼ ì„ íƒí•©ë‹ˆë‹¤.
                             SelectionStrategy =
                                 new KernelFunctionSelectionStrategy(selectionFunction, CreateKernelWithChatCompletion())
                                 {
-                                    // Ç×»ó ÀÛ°¡ ¿¡ÀÌÀüÆ®·Î ½ÃÀÛÇÕ´Ï´Ù.
+                                    // í•­ìƒ ì‘ê°€ ì—ì´ì „íŠ¸ë¡œ ì‹œì‘í•©ë‹ˆë‹¤.
                                     InitialAgent = agentDeveloper,
-                                    // °á°ú °ªÀ» ¹®ÀÚ¿­·Î ¹İÈ¯ÇÕ´Ï´Ù.
+                                    // ê²°ê³¼ ê°’ì„ ë¬¸ìì—´ë¡œ ë°˜í™˜í•©ë‹ˆë‹¤.
                                     ResultParser = (result) => result.GetValue<string>() ?? MenuDeveloperName,
-                                    // È÷½ºÅä¸® ÀÎ¼ö¿¡ ´ëÇÑ ÇÁ·ÒÇÁÆ® º¯¼ö ÀÌ¸§
+                                    // íˆìŠ¤í† ë¦¬ ì¸ìˆ˜ì— ëŒ€í•œ í”„ë¡¬í”„íŠ¸ ë³€ìˆ˜ ì´ë¦„
                                     HistoryVariableName = "history",
-                                    // ÇÁ·ÒÇÁÆ®¿¡ ÀüÃ¼ È÷½ºÅä¸®¸¦ Æ÷ÇÔÇÏÁö ¾ÊÀ½À¸·Î½á ÅäÅ« Àı¾à
+                                    // í”„ë¡¬í”„íŠ¸ì— ì „ì²´ íˆìŠ¤í† ë¦¬ë¥¼ í¬í•¨í•˜ì§€ ì•ŠìŒìœ¼ë¡œì¨ í† í° ì ˆì•½
                                     HistoryReducer = strategyReducer,
                                 },
                         }
                 };
 
-            // Ã¤ÆÃÀ» È£ÃâÇÏ°í ¸Ş½ÃÁö¸¦ Ç¥½ÃÇÕ´Ï´Ù.
-            ChatMessageContent message = new(AuthorRole.User, "±¤È­¹®¿ª ÁÖº¯¿¡ ÇÁ¶û½º °¡Á¤ À½½ÄÁ¡À» ¸¸µé·Á°í ÇØ.");
+            // ì±„íŒ…ì„ í˜¸ì¶œí•˜ê³  ë©”ì‹œì§€ë¥¼ í‘œì‹œí•©ë‹ˆë‹¤.
+            ChatMessageContent message = new(AuthorRole.User, "ê´‘í™”ë¬¸ì—­ ì£¼ë³€ì— í”„ë‘ìŠ¤ ê°€ì • ìŒì‹ì ì„ ë§Œë“¤ë ¤ê³  í•´.");
             chat.AddChatMessage(message);
             this.WriteAgentChatMessage(message);
 

@@ -1,4 +1,4 @@
-using System.ComponentModel;
+ï»¿using System.ComponentModel;
 
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
@@ -17,12 +17,12 @@ namespace MultiAgents
     public class Demo2_02(ITestOutputHelper output) : BaseAgentsTest(output)
     {
         private const string HostName = "Host";
-        private const string HostInstructions = "¸Ş´º¿¡ ´ëÇÑ Áú¹®¿¡ ´äº¯ÇÏ¼¼¿ä.";
+        private const string HostInstructions = "ë©”ë‰´ì— ëŒ€í•œ ì§ˆë¬¸ì— ë‹µë³€í•˜ì„¸ìš”.";
 
         [Fact]
         public async Task UseChatCompletionWithPluginAgentAsync()
         {
-            // ¿¡ÀÌÀüÆ® Á¤ÀÇ
+            // ì—ì´ì „íŠ¸ ì •ì˜
             ChatCompletionAgent agent =
                 new()
                 {
@@ -32,20 +32,20 @@ namespace MultiAgents
                     Arguments = new KernelArguments(new OpenAIPromptExecutionSettings() { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() }),
                 };
 
-            // ÇÃ·¯±×ÀÎ ÃÊ±âÈ­ ¹× ¿¡ÀÌÀüÆ®ÀÇ Ä¿³Î¿¡ Ãß°¡ (Á÷Á¢ Ä¿³Î »ç¿ë°ú µ¿ÀÏ).
+            // í”ŒëŸ¬ê·¸ì¸ ì´ˆê¸°í™” ë° ì—ì´ì „íŠ¸ì˜ ì»¤ë„ì— ì¶”ê°€ (ì§ì ‘ ì»¤ë„ ì‚¬ìš©ê³¼ ë™ì¼).
             KernelPlugin plugin = KernelPluginFactory.CreateFromType<MenuPlugin>();
             agent.Kernel.Plugins.Add(plugin);
 
-            /// ¿¡ÀÌÀüÆ® »óÈ£ÀÛ¿ëÀ» Ä¸Ã³ÇÏ±â À§ÇÑ Ã¤ÆÃ ±â·Ï »ı¼º.
+            /// ì—ì´ì „íŠ¸ ìƒí˜¸ì‘ìš©ì„ ìº¡ì²˜í•˜ê¸° ìœ„í•œ ì±„íŒ… ê¸°ë¡ ìƒì„±.
             ChatHistory chat = [];
 
-            // »ç¿ëÀÚ ÀÔ·Â¿¡ ÀÀ´äÇÏ°í ÀûÀıÇÑ °æ¿ì ÇÔ¼ö¸¦ È£Ãâ.
-            await InvokeAgentAsync("¾È³çÇÏ¼¼¿ä");
-            await InvokeAgentAsync("¿À´ÃÀÇ ½ºÆä¼È ¼öÇÁ´Â ¹«¾ùÀÎ°¡¿ä?");
-            await InvokeAgentAsync("¿À´ÃÀÇ ½ºÆä¼È À½·á´Â ¹«¾ùÀÎ°¡¿ä?");
-            await InvokeAgentAsync("°¨»çÇÕ´Ï´Ù");
+            // ì‚¬ìš©ì ì…ë ¥ì— ì‘ë‹µí•˜ê³  ì ì ˆí•œ ê²½ìš° í•¨ìˆ˜ë¥¼ í˜¸ì¶œ.
+            await InvokeAgentAsync("ì•ˆë…•í•˜ì„¸ìš”");
+            await InvokeAgentAsync("ì˜¤ëŠ˜ì˜ ìŠ¤í˜ì…œ ìˆ˜í”„ëŠ” ë¬´ì—‡ì¸ê°€ìš”?");
+            await InvokeAgentAsync("ì˜¤ëŠ˜ì˜ ìŠ¤í˜ì…œ ìŒë£ŒëŠ” ë¬´ì—‡ì¸ê°€ìš”?");
+            await InvokeAgentAsync("ê°ì‚¬í•©ë‹ˆë‹¤");
 
-            // ¿¡ÀÌÀüÆ®¸¦ È£ÃâÇÏ°í ´ëÈ­ ¸Ş½ÃÁö¸¦ Ç¥½Ã.
+            // ì—ì´ì „íŠ¸ë¥¼ í˜¸ì¶œí•˜ê³  ëŒ€í™” ë©”ì‹œì§€ë¥¼ í‘œì‹œ.
             async Task InvokeAgentAsync(string input)
             {
                 ChatMessageContent message = new(AuthorRole.User, input);
@@ -63,20 +63,20 @@ namespace MultiAgents
 
         private sealed class MenuPlugin
         {
-            [KernelFunction, Description("¸Ş´ºÀÇ Æ¯º° Ç×¸ñ ¸ñ·ÏÀ» Á¦°øÇÕ´Ï´Ù.")]
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1024:ÀûÀıÇÑ °æ¿ì ¼Ó¼ºÀ» »ç¿ëÇÏ¼¼¿ä", Justification = "³Ê¹« ½º¸¶Æ®ÇÔ")]
+            [KernelFunction, Description("ë©”ë‰´ì˜ íŠ¹ë³„ í•­ëª© ëª©ë¡ì„ ì œê³µí•©ë‹ˆë‹¤.")]
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1024:ì ì ˆí•œ ê²½ìš° ì†ì„±ì„ ì‚¬ìš©í•˜ì„¸ìš”", Justification = "ë„ˆë¬´ ìŠ¤ë§ˆíŠ¸í•¨")]
             public string GetSpecials() =>
                 """
-                ½ºÆä¼È ¼öÇÁ: Å¬·¥ Â÷¿ì´õ
-                ½ºÆä¼È »ø·¯µå: Äß »ø·¯µå
-                ½ºÆä¼È À½·á: Â÷ÀÌ Æ¼
+                ìŠ¤í˜ì…œ ìˆ˜í”„: í´ë¨ ì°¨ìš°ë”
+                ìŠ¤í˜ì…œ ìƒëŸ¬ë“œ: ì½¥ ìƒëŸ¬ë“œ
+                ìŠ¤í˜ì…œ ìŒë£Œ: ì°¨ì´ í‹°
                 """;
 
-            [KernelFunction, Description("¿äÃ»µÈ ¸Ş´º Ç×¸ñÀÇ °¡°İÀ» Á¦°øÇÕ´Ï´Ù.")]
+            [KernelFunction, Description("ìš”ì²­ëœ ë©”ë‰´ í•­ëª©ì˜ ê°€ê²©ì„ ì œê³µí•©ë‹ˆë‹¤.")]
             public string GetItemPrice(
-                [Description("¸Ş´º Ç×¸ñÀÇ ÀÌ¸§.")]
+                [Description("ë©”ë‰´ í•­ëª©ì˜ ì´ë¦„.")]
                 string menuItem) =>
-                "10,000¿ø";
+                "10,000ì›";
         }
     }
 }

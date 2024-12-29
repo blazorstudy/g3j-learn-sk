@@ -1,4 +1,4 @@
-using Microsoft.SemanticKernel;
+ï»¿using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.Agents.Chat;
 using Microsoft.SemanticKernel.ChatCompletion;
@@ -16,28 +16,28 @@ namespace MultiAgents
         private const string ReviewerName = "MenuReviewer";
         private const string ReviewerInstructions =
             """
-        ³Ê´Â ¸Ş´º °³¹ßÀÚ°¡ °³¹ßÇÑ ¸Ş´º¸¦ ¸®ºäÇÏ´Â ¸Ş´º¸®ºä¾îÀÔ´Ï´Ù.
-        ³Ê´Â »õ·Î¿î ¸Ş´º°¡ ½Ä´çÀÇ ÀÌ¹ÌÁö¿Í Àß ¾î¿ï¸®´ÂÁö ÆÇ´ÜÇÏ´Â °ÍÀÌ ¸ñÇ¥ÀÔ´Ï´Ù.
-        ÀûÇÕÇÏ´Ù¸é ½ÂÀÎµÇ¾ú´Ù°í ¸í½ÃÀûÀ¸·Î ¸»ÇÏ¼¼¿ä.
-        ±×·¸Áö ¾Ê´Ù¸é ¿¹½Ã ¾øÀÌ °³¼± ¹æ¹ı¿¡ ´ëÇÑ ÀÎ»çÀÌÆ®¸¦ Á¦°øÇÏ¼¼¿ä.
+        ë„ˆëŠ” ë©”ë‰´ ê°œë°œìê°€ ê°œë°œí•œ ë©”ë‰´ë¥¼ ë¦¬ë·°í•˜ëŠ” ë©”ë‰´ë¦¬ë·°ì–´ì…ë‹ˆë‹¤.
+        ë„ˆëŠ” ìƒˆë¡œìš´ ë©”ë‰´ê°€ ì‹ë‹¹ì˜ ì´ë¯¸ì§€ì™€ ì˜ ì–´ìš¸ë¦¬ëŠ”ì§€ íŒë‹¨í•˜ëŠ” ê²ƒì´ ëª©í‘œì…ë‹ˆë‹¤.
+        ì í•©í•˜ë‹¤ë©´ ìŠ¹ì¸ë˜ì—ˆë‹¤ê³  ëª…ì‹œì ìœ¼ë¡œ ë§í•˜ì„¸ìš”.
+        ê·¸ë ‡ì§€ ì•Šë‹¤ë©´ ì˜ˆì‹œ ì—†ì´ ê°œì„  ë°©ë²•ì— ëŒ€í•œ ì¸ì‚¬ì´íŠ¸ë¥¼ ì œê³µí•˜ì„¸ìš”.
         """;
 
         private const string MenuDeveloperName = "MenuDeveloper";
         private const string MenuDeveloperInstructions =
             """
-        ³Ê´Â ½Ä´ç¿¡°Ô ½Ä´çÀÇ »óÈ², Æ¯»ö¿¡ ¸Â°Ô ÃÖ¼±ÀÇ ¸Ş´º¸¦ °³¹ßÇÏ´Â ¸Ş´º °³¹ßÀÚÀÔ´Ï´Ù.
-        ³Ê´Â °í°´ÀÌ ÁÁ¾ÆÇÒ ¸¸ÇÑ »õ·Î¿î À½½ÄÀ» »ı°¢ÇØ³À´Ï´Ù.
-        ³Ê´Â ½Ä´çÀÇ ºĞÀ§±â¿Í °í°´ÀÇ ÃëÇâ¿¡ ¸Â°Ô ´Ù¾çÇÑ À½½ÄÀ» Á¶ÇÕÇÏ¿© ¸Ş´º¸¦ ±¸¼ºÇÕ´Ï´Ù.
-        ÇÑ ¹ø¿¡ ÇÏ³ªÀÇ Á¦¾È¸¸ Á¦°øÇÕ´Ï´Ù.
-        ÇöÀç ¸ñÇ¥¿¡ ÁıÁßÇÕ´Ï´Ù.
-        ¾µµ¥¾ø´Â Àâ´ãÀ¸·Î ½Ã°£À» ³¶ºñÇÏÁö ¾Ê½À´Ï´Ù.
-        ¾ÆÀÌµğ¾î¸¦ °³¼±ÇÒ ¶§ Á¦¾ÈÀ» °í·ÁÇÕ´Ï´Ù.
+        ë„ˆëŠ” ì‹ë‹¹ì—ê²Œ ì‹ë‹¹ì˜ ìƒí™©, íŠ¹ìƒ‰ì— ë§ê²Œ ìµœì„ ì˜ ë©”ë‰´ë¥¼ ê°œë°œí•˜ëŠ” ë©”ë‰´ ê°œë°œìì…ë‹ˆë‹¤.
+        ë„ˆëŠ” ê³ ê°ì´ ì¢‹ì•„í•  ë§Œí•œ ìƒˆë¡œìš´ ìŒì‹ì„ ìƒê°í•´ëƒ…ë‹ˆë‹¤.
+        ë„ˆëŠ” ì‹ë‹¹ì˜ ë¶„ìœ„ê¸°ì™€ ê³ ê°ì˜ ì·¨í–¥ì— ë§ê²Œ ë‹¤ì–‘í•œ ìŒì‹ì„ ì¡°í•©í•˜ì—¬ ë©”ë‰´ë¥¼ êµ¬ì„±í•©ë‹ˆë‹¤.
+        í•œ ë²ˆì— í•˜ë‚˜ì˜ ì œì•ˆë§Œ ì œê³µí•©ë‹ˆë‹¤.
+        í˜„ì¬ ëª©í‘œì— ì§‘ì¤‘í•©ë‹ˆë‹¤.
+        ì“¸ë°ì—†ëŠ” ì¡ë‹´ìœ¼ë¡œ ì‹œê°„ì„ ë‚­ë¹„í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+        ì•„ì´ë””ì–´ë¥¼ ê°œì„ í•  ë•Œ ì œì•ˆì„ ê³ ë ¤í•©ë‹ˆë‹¤.
         """;
 
         [Fact]
         public async Task UseAgentGroupChatWithTwoAgentsAsync()
         {
-            // ¿¡ÀÌÀüÆ® Á¤ÀÇ
+            // ì—ì´ì „íŠ¸ ì •ì˜
             ChatCompletionAgent agentReviewer =
                 new()
                 {
@@ -54,28 +54,28 @@ namespace MultiAgents
                     Kernel = this.CreateKernelWithChatCompletion(),
                 };
 
-            // ¿¡ÀÌÀüÆ® »óÈ£ÀÛ¿ëÀ» À§ÇÑ Ã¤ÆÃ »ı¼º
+            // ì—ì´ì „íŠ¸ ìƒí˜¸ì‘ìš©ì„ ìœ„í•œ ì±„íŒ… ìƒì„±
             AgentGroupChat chat =
                 new(agentDeveloper, agentReviewer)
                 {
                     ExecutionSettings =
                         new()
                         {
-                            // TerminatorStrategy¸¦ »ç¿ëÇÏ¿© Ã¤ÆÃ Á¾·á Á¶°ÇÀ» ¼³Á¤ÇÕ´Ï´Ù.
-                            // ¾î½Ã½ºÅÏÆ®°¡ ½ÂÀÎÀÌ¶ó´Â ´Ü¾î¸¦ ÀÀ´äÇÏ¸é Ã¤ÆÃÀÌ Á¾·áµË´Ï´Ù.
+                            // TerminatorStrategyë¥¼ ì‚¬ìš©í•˜ì—¬ ì±„íŒ… ì¢…ë£Œ ì¡°ê±´ì„ ì„¤ì •í•©ë‹ˆë‹¤.
+                            // ì–´ì‹œìŠ¤í„´íŠ¸ê°€ ìŠ¹ì¸ì´ë¼ëŠ” ë‹¨ì–´ë¥¼ ì‘ë‹µí•˜ë©´ ì±„íŒ…ì´ ì¢…ë£Œë©ë‹ˆë‹¤.
                             TerminationStrategy =
                                 new ApprovalTerminationStrategy()
                                 {
-                                    // MenuReviewer¸¸ ÀÌ¸¦ ½ÂÀÎÇÒ ¼ö ÀÖÀ½
+                                    // MenuReviewerë§Œ ì´ë¥¼ ìŠ¹ì¸í•  ìˆ˜ ìˆìŒ
                                     Agents = [agentReviewer],
-                                    // ÃÖ´ë 10È¸±îÁö ¹İº¹
+                                    // ìµœëŒ€ 10íšŒê¹Œì§€ ë°˜ë³µ
                                     MaximumIterations = 10,
                                 }
                         }
                 };
 
-            // Ã¤ÆÃÀ» ½ÃÀÛÇÏ°í °á°ú¸¦ Ãâ·ÂÇÕ´Ï´Ù.
-            ChatMessageContent input = new(AuthorRole.User, "±¤È­¹®¿ª ÁÖº¯¿¡ ÇÁ¶û½º °¡Á¤ À½½ÄÁ¡À» ¸¸µé·Á°í ÇØ.");
+            // ì±„íŒ…ì„ ì‹œì‘í•˜ê³  ê²°ê³¼ë¥¼ ì¶œë ¥í•©ë‹ˆë‹¤.
+            ChatMessageContent input = new(AuthorRole.User, "ê´‘í™”ë¬¸ì—­ ì£¼ë³€ì— í”„ë‘ìŠ¤ ê°€ì • ìŒì‹ì ì„ ë§Œë“¤ë ¤ê³  í•´.");
             chat.AddChatMessage(input);
             this.WriteAgentChatMessage(input);
 
@@ -89,9 +89,9 @@ namespace MultiAgents
 
         private sealed class ApprovalTerminationStrategy : TerminationStrategy
         {
-            // ¸Ş½ÃÁö¿¡ "½ÂÀÎ"ÀÌ¶ó´Â ´Ü¾î°¡ Æ÷ÇÔµÇ¸é AgentGroupChatÀ» Á¾·áÇÕ´Ï´Ù.
+            // ë©”ì‹œì§€ì— "ìŠ¹ì¸"ì´ë¼ëŠ” ë‹¨ì–´ê°€ í¬í•¨ë˜ë©´ AgentGroupChatì„ ì¢…ë£Œí•©ë‹ˆë‹¤.
             protected override Task<bool> ShouldAgentTerminateAsync(Agent agent, IReadOnlyList<ChatMessageContent> history, CancellationToken cancellationToken)
-                => Task.FromResult((history[history.Count - 1].Content?.Contains("½ÂÀÎ", StringComparison.OrdinalIgnoreCase) == true 
+                => Task.FromResult((history[history.Count - 1].Content?.Contains("ìŠ¹ì¸", StringComparison.OrdinalIgnoreCase) == true 
                     || history[history.Count - 1].Content?.Contains("approve", StringComparison.OrdinalIgnoreCase) == true));
         }
     }
