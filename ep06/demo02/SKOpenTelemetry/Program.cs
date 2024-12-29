@@ -4,12 +4,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 using OpenTelemetry;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+
+using SKOpenTelemetry.Plugins;
 
 var config = new ConfigurationBuilder()
                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -124,12 +127,20 @@ var config = new ConfigurationBuilder()
 #endregion
 
 var builder = Kernel.CreateBuilder();
+
+#region TELEMETRY SETUP
 // builder.Services.AddSingleton(loggerFactory);
+#endregion
+
 builder.AddAzureOpenAIChatCompletion(
            deploymentName: config["Azure:OpenAI:DeploymentName"]!,
            endpoint: config["Azure:OpenAI:Endpoint"]!,
            apiKey: config["Azure:OpenAI:ApiKey"]!
        );
+
+#region FUNCTION CALLING
+// builder.Plugins.AddFromType<BookingPlugin>();
+#endregion
 
 var kernel = builder.Build();
 
@@ -144,7 +155,17 @@ while (true)
 
     Console.Write("Assistant: ");
     var message = default(string);
+
+#region PROMPT STREAMING
     var result = kernel.InvokePromptStreamingAsync(input);
+#endregion
+
+#region FUNCTION CALLING
+    // var result = kernel.InvokePromptStreamingAsync(
+    //     input,
+    //     new KernelArguments(new OpenAIPromptExecutionSettings { FunctionChoiceBehavior = FunctionChoiceBehavior.Auto() })
+    // );
+#endregion
     await foreach (var text in result)
     {
         await Task.Delay(20);
