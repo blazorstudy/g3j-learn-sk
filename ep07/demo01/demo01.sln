@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WithInMemoryDemo", "WithInMemoryDemo\WithInMemoryDemo.csproj", "{F5268DD5-3B22-4AC5-873D-70C3932E3590}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5268DD5-3B22-4AC5-873D-70C3932E3590}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5268DD5-3B22-4AC5-873D-70C3932E3590}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5268DD5-3B22-4AC5-873D-70C3932E3590}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5268DD5-3B22-4AC5-873D-70C3932E3590}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1ACADF36-ACC7-4F50-BFB8-9BFA10D2626D}
+	EndGlobalSection
+EndGlobal
