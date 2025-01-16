@@ -3,12 +3,12 @@
 
 using System.Text;
 
-using EmbeddingDemo;
-
 using Microsoft.Extensions.VectorData;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.InMemory;
 using Microsoft.SemanticKernel.Embeddings;
+
+using WithInMemoryDemo;
 
 Console.OutputEncoding = Encoding.UTF8;
 
