@@ -26,37 +26,39 @@ namespace VectorStoreExercise
     {
         ITextEmbeddingGenerationService textEmbeddingGenerationService;
         IVectorStoreRecordCollection<string, TodoItem> collection;
+
         public VectorStoreTextSearch<TodoItem> TextSearch { get; set; }
+
         public VectorStoreService()
         {
             textEmbeddingGenerationService = new AzureOpenAITextEmbeddingGenerationService(
                 "text-embedding-3-small",
                 Credential.EndPoint, Credential.ApiKey);
 
-            //var vectorStore = new InMemoryVectorStore();
+            var vectorStore = new InMemoryVectorStore();
 
             //var vectorStore = new AzureAISearchVectorStore(new SearchIndexClient(
             //    new Uri(Credential.AzureAiSearchEndpoint),
             //    new AzureKeyCredential(Credential.AzureAiSearchKey)));
+
+            collection = vectorStore.GetCollection<string, TodoItem>("sktodo");
+
+            //var cosmosClient = new CosmosClient(Credential.AzureCosmosDBConnectionString, new CosmosClientOptions()
+            //{
+            //    UseSystemTextJsonSerializerWithOptions = JsonSerializerOptions.Default
+            //});
             //
-            //collection = vectorStore.GetCollection<string, TodoItem>("sktodo");
-
-            var cosmosClient = new CosmosClient(Credential.AzureCosmosDBConnectionString, new CosmosClientOptions()
-            {
-                UseSystemTextJsonSerializerWithOptions = JsonSerializerOptions.Default
-            });
-
-            var database = cosmosClient.GetDatabase("DB");
-
-            var vectorStore = new AzureCosmosDBNoSQLVectorStore(database);
-
-            collection = new AzureCosmosDBNoSQLVectorStoreRecordCollection<TodoItem>(
-                database,
-                "sktodo",
-                new()
-                {
-                    PartitionKeyPropertyName = nameof(TodoItem.PartitionKey)
-                });
+            //var database = cosmosClient.GetDatabase("DB");
+            //
+            //var vectorStore = new AzureCosmosDBNoSQLVectorStore(database);
+            //
+            //collection = new AzureCosmosDBNoSQLVectorStoreRecordCollection<TodoItem>(
+            //    database,
+            //    "sktodo",
+            //    new()
+            //    {
+            //        PartitionKeyPropertyName = nameof(TodoItem.PartitionKey)
+            //    });
 
             TextSearch = new VectorStoreTextSearch<TodoItem>(collection, textEmbeddingGenerationService);
         }
@@ -76,15 +78,25 @@ namespace VectorStoreExercise
             return await Task.WhenAll(upsertedKeysTasks);
         }
 
-        public async Task<List<VectorSearchResult<TodoItem>>> Search(string searchString)
+        public async Task<List<VectorSearchResult<TodoItem>>> Search(string searchString, string? catogory = null)
         {
+            VectorSearchFilter? filter = null;
+            if (!string.IsNullOrEmpty(catogory))
+            {
+                filter = new VectorSearchFilter()
+                    .EqualTo(nameof(TodoItem.Category), catogory);
+            }
+
+            var vectorSearchOptions = new VectorSearchOptions
+            {
+                Top = 3,
+                Filter = filter
+            };
+            
             var searchVector = await textEmbeddingGenerationService.GenerateEmbeddingAsync(searchString);
             var searchResult = await collection.VectorizedSearchAsync(
-                searchVector,
-                new()
-                {
-                    Top = 3
-                });
+                searchVector, vectorSearchOptions);
+
             var searchResultItems = await searchResult.Results.ToListAsync();
             return searchResultItems;
         }

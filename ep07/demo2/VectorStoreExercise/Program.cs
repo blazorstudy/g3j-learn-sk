@@ -25,14 +25,58 @@ while (true)
     var input = Console.ReadLine();
     Console.WriteLine();
 
-    await Input(input);
+    await Input1(input);
+}
+
+async Task Input1(string query)
+{
+    chatHistory.AddUserMessage(query);
+
+    var searchResults = await vectorStore.Search(query);
+    var searchEmbeddingResult = string.Empty;
+
+    foreach (var searchResult in searchResults)
+    {
+        searchEmbeddingResult += searchResult.Record.EmbeddingData;
+        searchEmbeddingResult += $"Link : {searchResult.Record.Link}";
+        searchEmbeddingResult += Environment.NewLine;
+        searchEmbeddingResult += Environment.NewLine;
+    }
+
+    string promptTemplate = $"""
+            {searchEmbeddingResult}  
+
+            {query}
+
+            응답에서 참조된 정보와 관련된 인용을 포함하세요.
+
+            """;
+
+    KernelArguments arguments = new() { { "query", query } };
+    HandlebarsPromptTemplateFactory promptTemplateFactory = new();
+
+    var result = kernel.InvokePromptStreamingAsync(
+            promptTemplate,
+            arguments,
+            templateFormat: HandlebarsPromptTemplateFactory.HandlebarsTemplateFormat,
+            promptTemplateFactory: promptTemplateFactory);
+
+    Console.Write("Assistant : ");
+    var assistantMsg = string.Empty;
+    await foreach (var text in result)
+    {
+        await Task.Delay(20);
+        assistantMsg += text;
+        Console.Write(text);
+    }
+
+    Console.WriteLine();
+    Console.WriteLine();
 }
 
 async Task Input(string query)
 {
     chatHistory.AddUserMessage(query);
-
-    #region 3. Streaming
 
     string promptTemplate = """
             {{#with (SearchPlugin-GetTextSearchResults query)}}  
@@ -69,6 +113,4 @@ async Task Input(string query)
 
     Console.WriteLine();
     Console.WriteLine();
-
-    #endregion
 }
