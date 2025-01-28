@@ -9,3 +9,4 @@
     public const string AzureAiSearchKey = "azure-ai-search-apikey";
 
     public const string AzureCosmosDBConnectionString = "azure-cosmosdb-connectionstring";
+}
