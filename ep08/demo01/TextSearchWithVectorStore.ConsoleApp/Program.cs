@@ -69,22 +69,38 @@ var config = new ConfigurationBuilder()
 // });
 #endregion
 
-#region Semantic Kernel Text Search with Vector Store
-var service = new TextSearchService(config);
-var collection = await service.GetVectorStoreRecordCollectionAsync("records");
-var search = await service.GetVectorStoreTextSearchAsync(collection);
+#region Semantic Kernel chat completion
+var openAIClient = new OpenAIClient(new ApiKeyCredential(config["GitHub:Models:0:Token"]!), new OpenAIClientOptions { Endpoint = new Uri(config["GitHub:Models:0:Endpoint"]!) });
+
+var kernel = Kernel.CreateBuilder()
+                   .AddOpenAIChatCompletion(config["GitHub:Models:0:ModelId"]!, openAIClient)
+                   .Build();
 
 var query = "What is the Semantic Kernel?";
-
-var searchResults = await search.GetTextSearchResultsAsync(query, new TextSearchOptions() { Top = 2, Skip = 0 });
-
-Console.WriteLine("\n--- Text Search Results ---\n");
-await foreach (var result in searchResults.Results)
+var response = kernel.InvokePromptStreamingAsync(query);
+await foreach (var content in response)
 {
-    Console.WriteLine($"Name:  {result.Name}");
-    Console.WriteLine($"Value: {result.Value}");
-    Console.WriteLine($"Link:  {result.Link}");
+    await Task.Delay(20);
+    Console.Write(content);
 }
+#endregion
+
+#region Semantic Kernel Text Search with Vector Store
+// var service = new TextSearchService(config);
+// var collection = await service.GetVectorStoreRecordCollectionAsync("records");
+// var search = await service.GetVectorStoreTextSearchAsync(collection);
+
+// var query = "What is the Semantic Kernel?";
+
+// var searchResults = await search.GetTextSearchResultsAsync(query, new TextSearchOptions() { Top = 2, Skip = 0 });
+
+// Console.WriteLine("\n--- Text Search Results ---\n");
+// await foreach (var result in searchResults.Results)
+// {
+//     Console.WriteLine($"Name:  {result.Name}");
+//     Console.WriteLine($"Value: {result.Value}");
+//     Console.WriteLine($"Link:  {result.Link}");
+// }
 #endregion
 
 #region Semantic Kernel Text Search from Chat Completions
