@@ -1,0 +1,158 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning",
+      // Examples: how to handle logs differently by class
+      //      "Microsoft.KernelMemory.Handlers.TextExtractionHandler": "Information",
+      //      "Microsoft.KernelMemory.Handlers.TextPartitioningHandler": "Information",
+      //      "Microsoft.KernelMemory.Handlers.GenerateEmbeddingsHandler": "Information",
+      //      "Microsoft.KernelMemory.Handlers.SaveEmbeddingsHandler": "Information",
+      //      "Microsoft.KernelMemory.DocumentStorage.AzureBlobs": "Information",
+      //      "Microsoft.KernelMemory.Pipeline.Queue.AzureQueues": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "KernelMemory": {
+    "Services": {
+      "AzureOpenAIEmbedding": {
+        // "ApiKey" or "AzureIdentity"
+        // AzureIdentity: use automatic Entra (AAD) authentication mechanism.
+        //   You can test locally using the AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET env vars.
+        "Auth": "AzureIdentity",
+        // Optional when Auth == AzureIdentity. Leave it null to use the default.
+        // in which case use this to change the client audience.
+        "AzureIdentityAudience": null,
+        "Endpoint": "https://<...>.openai.azure.com/",
+        "APIKey": "",
+        "Deployment": "",
+        // The max number of tokens supported by model deployed
+        // See https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models
+        "MaxTokenTotal": 8191
+      },
+      "AzureOpenAIText": {
+        // "ApiKey" or "AzureIdentity"
+        // AzureIdentity: use automatic Entra (AAD) authentication mechanism.
+        //   You can test locally using the AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET env vars.
+        "Auth": "AzureIdentity",
+        // Optional when Auth == AzureIdentity. Leave it null to use the default.
+        // in which case use this to change the client audience.
+        "AzureIdentityAudience": null,
+        "Endpoint": "https://<...>.openai.azure.com/",
+        "APIKey": "",
+        "Deployment": "",
+        // The max number of tokens supported by model deployed
+        // See https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models
+        "MaxTokenTotal": 16384,
+        // "ChatCompletion" or "TextCompletion"
+        "APIType": "ChatCompletion",
+        "MaxRetries": 10
+      },
+      "OpenAI": {
+        // Name of the model used to generate text (text completion or chat completion)
+        "TextModel": "gpt-4o-mini",
+        // The max number of tokens supported by the text model.
+        "TextModelMaxTokenTotal": 16384,
+        // What type of text generation, by default autodetect using the model name.
+        // Possible values: "Auto", "TextCompletion", "Chat"
+        "TextGenerationType": "Auto",
+        // Name of the model used to generate text embeddings
+        "EmbeddingModel": "text-embedding-ada-002",
+        // The max number of tokens supported by the embedding model
+        // See https://platform.openai.com/docs/guides/embeddings/what-are-embeddings
+        "EmbeddingModelMaxTokenTotal": 8191,
+        // OpenAI API Key
+        "APIKey": "",
+        // OpenAI Organization ID (usually empty, unless you have multiple accounts on different orgs)
+        "OrgId": "",
+        // Endpoint to use. By default the system uses 'https://api.openai.com/v1'.
+        // Change this to use proxies or services compatible with OpenAI HTTP protocol like LM Studio.
+        "Endpoint": "",
+        // How many times to retry in case of throttling
+        "MaxRetries": 10
+      },
+      "LlamaSharp": {
+        "TextModel": {
+          // path to file, e.g. "llama-2-7b-chat.Q6_K.gguf"
+          "ModelPath": "",
+          // Max number of tokens supported by the model
+          "MaxTokenTotal": 4096
+          // Optional parameters
+          // "GpuLayerCount": 32,
+        },
+        "EmbeddingModel": {
+          // path to file, e.g. "nomic-embed-text-v1.5.Q8_0.gguf"
+          "ModelPath": "",
+          // Max number of tokens supported by the model
+          "MaxTokenTotal": 4096
+          // Optional parameters
+          // "GpuLayerCount": 32,
+        }
+      },
+      "AzureAIDocIntel": {
+        // "APIKey" or "AzureIdentity".
+        // AzureIdentity: use automatic Entra (AAD) authentication mechanism.
+        //   When the service is on sovereign clouds you can use the AZURE_AUTHORITY_HOST env var to
+        //   set the authority host. See https://learn.microsoft.com/dotnet/api/overview/azure/identity-readme
+        //   You can test locally using the AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET env vars.
+        "Auth": "AzureIdentity",
+        // Optional when Auth == AzureIdentity. Leave it null to use the default.
+        // When the service is on sovereign clouds, this setting might be necessary to configure Entra auth tokens.
+        // See https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/formrecognizer/Azure.AI.FormRecognizer/src/DocumentAnalysisAudience.cs
+        "AzureIdentityAudience": null,
+        // Required when Auth == APIKey
+        "APIKey": "",
+        "Endpoint": ""
+      },
+      "AzureAISearch": {
+        // "ApiKey" or "AzureIdentity". For other options see <AzureAISearchConfig>.
+        // AzureIdentity: use automatic Entra (AAD) authentication mechanism.
+        //   When the service is on sovereign clouds you can use the AZURE_AUTHORITY_HOST env var to
+        //   set the authority host. See https://learn.microsoft.com/dotnet/api/overview/azure/identity-readme
+        //   You can test locally using the AZURE_TENANT_ID, AZURE_CLIENT_ID, AZURE_CLIENT_SECRET env vars.
+        "Auth": "AzureIdentity",
+        // Optional when Auth == AzureIdentity. Leave it null to use the default.
+        // When the service is on sovereign clouds, this setting might be necessary to configure Entra auth tokens.
+        // See https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/search/Azure.Search.Documents/src/SearchAudience.cs
+        "AzureIdentityAudience": null,
+        // Required when Auth == APIKey
+        "APIKey": "",
+        "Endpoint": "https://<...>",
+        // Hybrid search is not enabled by default. Note that when using hybrid search
+        // relevance scores are different, usually lower, than when using just vector search
+        "UseHybridSearch": false,
+        // Helps improve relevance score consistency for search services with multiple replicas by
+        // attempting to route a given request to the same replica for that session. Use this when
+        // favoring consistent scoring over lower latency. Can adversely affect performance.
+        //
+        // Whether to use sticky sessions, which can help getting more consistent results.
+        // When using sticky sessions, a best-effort attempt will be made to target the same replica set.
+        // Be wary that reusing the same replica repeatedly can interfere with the load balancing of
+        // the requests across replicas and adversely affect the performance of the search service.
+        //
+        // See https://learn.microsoft.com/rest/api/searchservice/documents/search-post?view=rest-searchservice-2024-07-01&tabs=HTTP#request-body
+        "UseStickySessions": false
+      }
+    },
+    "Retrieval": {
+      "SearchClient": {
+        // Maximum number of tokens accepted by the LLM used to generate answers.
+        // The number includes the tokens used for the answer, e.g. when using
+        // GPT4-32k, set this number to 32768.
+        // If the value is not set or less than one, SearchClient will use the
+        // max amount of tokens supported by the model in use.
+        "MaxAskPromptSize": -1,
+        // Maximum number of relevant sources to consider when generating an answer.
+        // The value is also used as the max number of results returned by SearchAsync
+        // when passing a limit less or equal to zero.
+        "MaxMatchesCount": 100,
+        // How many tokens to reserve for the answer generated by the LLM.
+        // E.g. if the LLM supports max 4000 tokens, and AnswerTokens is 300, then
+        // the prompt sent to LLM will contain max 3700 tokens, composed by
+        // prompt + question + grounding information retrieved from memory.
+        "AnswerTokens": 300,
+        // Text to return when the LLM cannot produce an answer.
+        "EmptyAnswer": "INFO NOT FOUND"
+      }
+    }
+  }
+}
