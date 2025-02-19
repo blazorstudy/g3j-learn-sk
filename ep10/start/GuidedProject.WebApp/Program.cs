@@ -1,12 +1,24 @@
+using GuidedProject.WebApp.ApiClients;
 using GuidedProject.WebApp.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.AddServiceDefaults();
+
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+                .AddInteractiveServerComponents();
+
+builder.Services.AddHttpClient<IChatClient, ChatClient>(client =>
+{
+    var config = builder.Configuration;
+
+    client.BaseAddress = new Uri("https+http://apiapp");
+});
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -18,11 +30,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
 app.UseAntiforgery();
 
 app.MapStaticAssets();
+
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+   .AddInteractiveServerRenderMode();
 
 app.Run();
