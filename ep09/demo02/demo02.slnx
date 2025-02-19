@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="InteractiveSetup/InteractiveSetup.csproj" />
+  <Project Path="WebKernelMemoryClient/WebKernelMemoryClient.csproj" Id="956452d4-a228-4ad6-81fd-8d0ace516845" />
+  <Project Path="WebKernelMemoryService/WebKernelMemoryService.csproj" Id="3f47683e-d785-41eb-8506-b83c9cbfc02b" />
+</Solution>

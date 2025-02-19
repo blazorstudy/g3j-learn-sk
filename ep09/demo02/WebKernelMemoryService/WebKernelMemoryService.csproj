@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CA2007;CA1724;CA2254;CA1031;CA1861;CA1303;SKEXP0001;KMEXP05;</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" /> -->
+    <PackageReference Include="Microsoft.KernelMemory.Service.AspNetCore" Version="0.97.250211.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InteractiveSetup\InteractiveSetup.csproj" />
+  </ItemGroup>
+
+</Project>
