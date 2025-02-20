@@ -16,19 +16,22 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IKernelService, KernelService>();
 
+builder.AddAzureOpenAIClient("openai");
+
 builder.Services.AddSingleton<Kernel>(sp =>
 {
     var config = builder.Configuration;
 
-    var client = new OpenAIClient(
-        credential: new ApiKeyCredential(config["GitHub:Models:AccessToken"]!),
-        options: new OpenAIClientOptions { Endpoint = new Uri(config["GitHub:Models:Endpoint"]!) });
+    var client = sp.GetRequiredService<OpenAIClient>();
+    // var client = new OpenAIClient(
+    //     credential: new ApiKeyCredential(config["GitHub:Models:AccessToken"]!),
+    //     options: new OpenAIClientOptions { Endpoint = new Uri(config["GitHub:Models:Endpoint"]!) });
 
     var kernel = Kernel.CreateBuilder()
                        .AddOpenAIChatCompletion(
                            modelId: config["GitHub:Models:ModelId"]!,
                            openAIClient: client,
-                           serviceId: "github")
+                           serviceId: config["SemanticKernel:ServiceId"])
                        .Build();
 
     return kernel;

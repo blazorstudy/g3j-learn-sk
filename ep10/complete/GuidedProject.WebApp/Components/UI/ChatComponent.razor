@@ -84,11 +84,9 @@
 
     protected async Task OnKeyDownAsync(KeyboardEventArgs e)
     {
-        if (e.Key != "Enter")
+        if (e.Key == "Enter")
         {
-            return;
+            await this.SendMessageAsync();
         }
-
-        await this.SendMessageAsync();
     }
 }
