@@ -20,6 +20,7 @@
                         @foreach (var message in Messages)
                         {
                             <div class="d-flex mb-2 p-2 bg-opacity-10 rounded @(message.Role == "User" ? "col-8 offset-4 bg-primary justify-content-end" : "col-8 bg-success justify-content-start")">
+                                @* @message.Content *@
                                 @((MarkupString)message.Content)
                             </div>
                         }
@@ -71,11 +72,13 @@
         var userMessage = this.UserMessage;
         this.UserMessage = string.Empty;
 
-        var response = Chat.CompleteChatStreamingAsync(userMessage);
+        // var response = Chat.CompleteChatStreamingAsync(userMessage);
+        var response = Chat.CompleteChatStreamingWithHistoryAsync(this.Messages);
         await foreach (var text in response)
         {
             await Task.Delay(20);
 
+            // assistantChatMessage.Content += $"{text} ";
             assistantChatMessage.Content += $"{text.Replace("\n", "<br />").Replace("\r", "<br />")}";
 
             await JSRuntime.InvokeVoidAsync("scrollToBottom", chatBody);
