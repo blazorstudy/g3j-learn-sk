@@ -56,6 +56,11 @@
         await Task.CompletedTask;
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToBottom", chatBody);
+    }
+
     protected async Task SendMessageAsync()
     {
         if (string.IsNullOrWhiteSpace(this.UserMessage) == true)
@@ -80,8 +85,6 @@
 
             // assistantChatMessage.Content += $"{text} ";
             assistantChatMessage.Content += $"{text.Replace("\n", "<br />").Replace("\r", "<br />")}";
-
-            await JSRuntime.InvokeVoidAsync("scrollToBottom", chatBody);
         }
     }
 
