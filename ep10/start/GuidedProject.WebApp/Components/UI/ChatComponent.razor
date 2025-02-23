@@ -82,6 +82,8 @@
             await Task.Delay(20);
 
             assistantChatMessage.Content += $"{text} ";
+
+            StateHasChanged();
         }
     }
 

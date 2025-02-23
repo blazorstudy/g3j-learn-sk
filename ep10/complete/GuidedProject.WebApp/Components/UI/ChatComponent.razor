@@ -85,6 +85,8 @@
 
             // assistantChatMessage.Content += $"{text} ";
             assistantChatMessage.Content += $"{text.Replace("\n", "<br />").Replace("\r", "<br />")}";
+
+            StateHasChanged();
         }
     }
 
