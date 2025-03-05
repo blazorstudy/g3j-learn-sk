@@ -20,7 +20,16 @@
                         @foreach (var message in Messages)
                         {
                             <div class="d-flex mb-2 p-2 bg-opacity-10 rounded @(message.Role == "User" ? "col-8 offset-4 bg-primary justify-content-end" : "col-8 bg-success justify-content-start")">
-                                @message.Content
+                                @if (string.IsNullOrWhiteSpace(message.Content) == true)
+                                {
+                                    <div class="spinner-border text-success" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @message.Content
+                                }
                             </div>
                         }
                     }

@@ -23,6 +23,8 @@ public static class ChatCompletionEndpoint
 
     public static async IAsyncEnumerable<PromptResponse> PostChatCompletionAsync([FromBody] PromptRequest req, IKernelService service)
     {
+        await Task.Delay(1000);
+
         var result = service.CompleteChatStreamingAsync(req.Prompt);
 
         await foreach (var text in result)

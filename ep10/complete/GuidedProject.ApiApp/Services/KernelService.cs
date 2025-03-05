@@ -1,8 +1,6 @@
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
-using OpenAI.Chat;
-
 using ChatMessageContent = Microsoft.SemanticKernel.ChatMessageContent;
 
 namespace GuidedProject.ApiApp.Services;
