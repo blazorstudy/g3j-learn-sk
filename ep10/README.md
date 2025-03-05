@@ -45,7 +45,7 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 #### AppHost 프로젝트 수정
 
-1. GitHub에서 Personal Access Token(PAT) 값을 생성합니다.
+1. GitHub에서 [Personal Access Token(PAT)](https://github.com/settings/tokens) 값을 생성합니다.
 1. 아래와 같이 GitHub Models에 접속하기 위한 커넥션 스트링을 생성합니다. `{{GITHUB_TOKEN}}`은 앞서 생성한 PAT입니다.
 
     ```bash
@@ -458,9 +458,9 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 1. 답변을 확인한 후 `CTRL`+`C` 키를 눌러 애플리케이션을 종료합니다.
 
-### 컨테이너를 통한 로컬 LLM 사용하기
+### 컨테이너를 통한 로컬 LLM 사용하기 - Ollama
 
-로컬 네트워크에서도 작동할 수 있도록 컨테이너를 이용해 로컬 LLM을 연결하고 실행시켜 보겠습니다.
+로컬 네트워크에서도 작동할 수 있도록 Ollama에서 제공하는 컨테이너와 모델을 이용해 로컬 LLM을 연결하고 실행시켜 보겠습니다.
 
 #### AppHost 프로젝트 수정
 
@@ -475,12 +475,15 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
     ```csharp
     var openai = builder.AddConnectionString("openai");
 
-    // 👇👇👇 OpenAI 인스턴스 추가
+    // 👇👇👇 Ollama 인스턴스 및 모델 추가
     var ollama = builder.AddOllama("ollama")
                         .WithDataVolume()
+                        //.WithContainerRuntimeArgs("--gpus=all")
                         .WithOpenWebUI()
                         .AddModel("phi4");
     ```
+
+   > 만약 로컬 컴퓨터의 GPU 자원을 활용하고 싶다면 위의 `//.WithContainerRuntimeArgs("--gpus=all")` 부분 주석을 해제하세요.
 
 1. 같은 파일에서 `apiapp` 인스턴스에 앞서 생성한 `OllamaApiClient` 레퍼런스를 추가합니다. 더불어 환경변수값도 추가합니다.
 
@@ -590,8 +593,8 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
     ```csharp
     builder.AddAzureOpenAIClient("openai");
 
-    // 👇👇👇 OpenAI 인스턴스 추가
-    builder.AddOllamaApiClient("ollama-phi4");
+    // 👇👇👇 OllamaApiClient 인스턴스 추가
+    builder.AddKeyedOllamaApiClient("ollama-phi4");
     ```
 
 1. 같은 파일에서 앞서 생성한 `OllamaApiClient` 인스턴스를 Semantic Kernel 인스턴스에 추가합니다.
@@ -605,7 +608,7 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
         var config = builder.Configuration;
 
         var openAIClient = sp.GetRequiredService<OpenAIClient>();
-        var ollamaClient = sp.GetRequiredService<IOllamaApiClient>();
+        var ollamaClient = sp.GetRequiredKeyedService<IOllamaApiClient>("ollama-phi4");
 
         var kernel = Kernel.CreateBuilder()
                            .AddOpenAIChatCompletion(
@@ -635,7 +638,7 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 1. 대시보드가 보이면 `webapp`의 엔드포인트를 클릭합니다.
 
-   ![.NET Aspire 대시보드 - Ollama](./images/03-dotnet-aspire-dashboard.png)
+   ![.NET Aspire 대시보드 - Ollama - Phi-4](./images/03-dotnet-aspire-dashboard.png)
 
 1. 채팅창에서 아무 프롬프트나 입력합니다. 그리고 아래 그림처럼 답하는 것을 확인합니다.
 
@@ -655,3 +658,120 @@ $REPOSITORY_ROOT = git rev-parse --show-toplevel
 
 1. 답변을 확인한 후 `CTRL`+`C` 키를 눌러 애플리케이션을 종료합니다.
 
+### 컨테이너를 통한 로컬 LLM 사용하기 - HuggingFace
+
+로컬 네트워크에서도 작동할 수 있도록 Ollama에서 제공하는 컨테이너와 HuggingFace에서 제공하는 모델을 이용해 로컬 LLM을 연결하고 실행시켜 보겠습니다.
+
+#### AppHost 프로젝트 수정
+
+1. `GuidedProject.AppHost/Program.cs` 파일을 열어 `OllamaApiClient` 레퍼런스를 추가합니다. 여기서는 `EXAONE 3.5 7.8B GGUF` 모델을 사용하겠습니다.
+
+    ```csharp
+    var openai = builder.AddConnectionString("openai");
+
+    // 👇👇👇 Ollama 인스턴스 및 HuggingFace 모델 추가
+    var hface = builder.AddOllama("hface")
+                       .WithDataVolume()
+                       //.WithContainerRuntimeArgs("--gpus=all")
+                       .WithOpenWebUI()
+                       .AddHuggingFaceModel("exaone", "LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct-GGUF");
+    ```
+
+   > 만약 로컬 컴퓨터의 GPU 자원을 활용하고 싶다면 위의 `//.WithContainerRuntimeArgs("--gpus=all")` 부분 주석을 해제하세요.
+
+1. 같은 파일에서 `apiapp` 인스턴스에 앞서 생성한 `OllamaApiClient` 레퍼런스를 추가합니다. 더불어 환경변수값도 추가합니다.
+
+    ```csharp
+    var apiapp = builder.AddProject<GuidedProject_ApiApp>("apiapp")
+                        .WithReference(openai)
+                        .WithReference(ollama)
+                        .WithReference(hface)
+                        .WithEnvironment("SemanticKernel__ServiceId", config["SemanticKernel:ServiceId"]!)
+                        .WithEnvironment("GitHub__Models__ModelId", config["GitHub:Models:ModelId"]!)
+                        .WaitFor(ollama)
+                        .WaitFor(hface);
+    ```
+
+1. `GuidedProject.AppHost/appsettings.json` 파일을 열어 `ServiceId` 값을 `hface`로 수정합니다.
+
+    ```json
+    "SemanticKernel": {
+      "ServiceId": "hface"
+    }
+    ```
+
+#### ApiApp 프로젝트 수정
+
+1. `GuidedProject.ApiApp/Program.cs` 파일을 열어 AppHost 프로젝트에서 생성한 `OllamaApiClient` 인스턴스를 받아옵니다.
+
+    ```csharp
+    builder.AddKeyedOllamaApiClient("ollama-phi4");
+
+    // 👇👇👇 OllamaApiClient 인스턴스 추가
+    builder.AddKeyedOllamaApiClient("exaone");
+    ```
+
+1. 같은 파일에서 앞서 생성한 `OllamaApiClient` 인스턴스를 Semantic Kernel 인스턴스에 추가합니다.
+
+    ```csharp
+    builder.AddKeyedOllamaApiClient("exaone");
+
+    // 👇👇👇 Semantic Kernel 인스턴스에 OllamaApiClient 인스턴스 추가
+    builder.Services.AddSingleton<Kernel>(sp =>
+    {
+        var config = builder.Configuration;
+
+        var openAIClient = sp.GetRequiredService<OpenAIClient>();
+        var ollamaClient = sp.GetRequiredKeyedService<IOllamaApiClient>("ollama-phi4");
+        var hfaceClient = sp.GetRequiredKeyedService<IOllamaApiClient>("exaone");
+
+        var kernel = Kernel.CreateBuilder()
+                           .AddOpenAIChatCompletion(
+                               modelId: config["GitHub:Models:ModelId"]!,
+                               openAIClient: openAIClient,
+                               serviceId: "github")
+                           .AddOllamaChatCompletion(
+                               ollamaClient: (OllamaApiClient)ollamaClient,
+                               serviceId: "ollama")
+                           .AddOllamaChatCompletion(
+                               ollamaClient: (OllamaApiClient)hfaceClient,
+                               serviceId: "hface")
+                           .Build();
+
+        return kernel;
+    });
+    ```
+
+#### 앱 실행
+
+1. Docker Desktop이 PC에서 실행되고 있는지 확인합니다.
+
+1. 아래 명령어를 실행시켜 .NET Aspire 대시보드 앱을 실행시킵니다.
+
+    ```bash
+    dotnet watch run --project ./GuidedProject.AppHost
+    ```
+
+   > 최초 실행시 Ollama 컨테이너 이미지 및 EXAONE 모델을 다운로드 받는데 네트워크 상황에 따라 시간이 오래 걸릴 수 있습니다.
+
+1. 대시보드가 보이면 `webapp`의 엔드포인트를 클릭합니다.
+
+   ![.NET Aspire 대시보드 - Ollama - EXAONE](./images/05-dotnet-aspire-dashboard.png)
+
+1. 채팅창에서 아무 프롬프트나 입력합니다. 그리고 아래 그림처럼 답하는 것을 확인합니다.
+
+   ![EXAONE 답변 예시](./images/06-huggingface-exaone.png)
+
+1. 이번에는 아래와 같이 질문을 해 봅니다.
+
+    ```text
+    곰탕이 뭐야?
+    ```
+
+   이후 아래와 같은 질문을 이어서 해 봅니다.
+
+    ```text
+    그거랑 햄버거랑 차이가 뭐야?
+    ```
+
+1. 답변을 확인한 후 `CTRL`+`C` 키를 눌러 애플리케이션을 종료합니다.

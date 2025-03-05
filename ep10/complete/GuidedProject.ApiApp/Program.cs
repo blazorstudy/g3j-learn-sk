@@ -1,5 +1,3 @@
-using System.ClientModel;
-
 using GuidedProject.ApiApp.Endpoints;
 using GuidedProject.ApiApp.Services;
 
@@ -19,14 +17,16 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<IKernelService, KernelService>();
 
 builder.AddAzureOpenAIClient("openai");
-builder.AddOllamaApiClient("ollama-phi4");
+builder.AddKeyedOllamaApiClient("ollama-phi4");
+builder.AddKeyedOllamaApiClient("exaone");
 
 builder.Services.AddSingleton<Kernel>(sp =>
 {
     var config = builder.Configuration;
 
     var openAIClient = sp.GetRequiredService<OpenAIClient>();
-    var ollamaClient = sp.GetRequiredService<IOllamaApiClient>();
+    var ollamaClient = sp.GetRequiredKeyedService<IOllamaApiClient>("ollama-phi4");
+    var hfaceClient = sp.GetRequiredKeyedService<IOllamaApiClient>("exaone");
 
     var kernel = Kernel.CreateBuilder()
                        .AddOpenAIChatCompletion(
@@ -36,6 +36,9 @@ builder.Services.AddSingleton<Kernel>(sp =>
                        .AddOllamaChatCompletion(
                            ollamaClient: (OllamaApiClient)ollamaClient,
                            serviceId: "ollama")
+                       .AddOllamaChatCompletion(
+                           ollamaClient: (OllamaApiClient)hfaceClient,
+                           serviceId: "hface")
                        .Build();
 
     return kernel;

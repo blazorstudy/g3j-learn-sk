@@ -1,3 +1,3 @@
-function scrollToBottom(element) {
+window.scrollToBottom = (element) => {
     element.scrollTop = element.scrollHeight;
-}
+};
