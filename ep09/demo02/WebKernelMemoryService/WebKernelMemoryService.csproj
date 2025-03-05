@@ -10,11 +10,7 @@
   <ItemGroup>
     <!-- <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2" /> -->
     <PackageReference Include="Microsoft.KernelMemory.Service.AspNetCore" Version="0.97.250211.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\InteractiveSetup\InteractiveSetup.csproj" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
   </ItemGroup>
 
 </Project>

@@ -1,3 +1,5 @@
+﻿using System.Text;
+
 using Microsoft.KernelMemory;
 
 namespace WebKernelMemoryClient;
@@ -12,6 +14,9 @@ public static class WebMainProgram
 
     public static async Task Main(string[] args)
     {
+        Console.InputEncoding = Encoding.UTF8;
+        Console.OutputEncoding = Encoding.UTF8;
+
         s_memory = new MemoryWebClient("http://127.0.0.1:9001/");
 
         // =======================
@@ -20,14 +25,14 @@ public static class WebMainProgram
 
         await StoreText();
         await StoreFile();
-        await StoreMultipleFiles();
-        await StoreFileWithMultipleTags();
-        await StoreWebPage();
-        await StoreHTMLFile();
-        await StoreWithCustomPipeline();
-        await StoreImage();
-        await StoreExcel();
-        await StoreJson();
+        // await StoreMultipleFiles();
+        // await StoreFileWithMultipleTags();
+        // await StoreWebPage();
+        // await StoreHTMLFile();
+        // await StoreWithCustomPipeline();
+        // await StoreImage();
+        // await StoreExcel();
+        // await StoreJson();
         Console.WriteLine("\n====================================\n");
 
         // Wait for remote ingestion pipelines to complete
@@ -45,14 +50,14 @@ public static class WebMainProgram
         // =======================
 
         await AskSimpleQuestionStreamingTheAnswer();
-        await AskSimpleQuestionStreamingAndShowSources();
-        await AskQuestionAboutImageContent();
-        await AskQuestionUsingFilter();
-        await AskQuestionsFilteringByUser();
-        await AskQuestionsFilteringByTypeTag();
-        await AskQuestionsAboutExcelData();
-        await AskQuestionsAboutJsonFile();
-        await DownloadFile();
+        // await AskSimpleQuestionStreamingAndShowSources();
+        // await AskQuestionAboutImageContent();
+        // await AskQuestionUsingFilter();
+        // await AskQuestionsFilteringByUser();
+        // await AskQuestionsFilteringByTypeTag();
+        // await AskQuestionsAboutExcelData();
+        // await AskQuestionsAboutJsonFile();
+        // await DownloadFile();
 
         // =======================
         // === PURGE =============
@@ -68,11 +73,14 @@ public static class WebMainProgram
     // Uploading some text, without using files. Hold a copy of the ID to delete it later.
     private static async Task StoreText()
     {
-        Console.WriteLine("Uploading text about E=mc^2");
-        var docId = await s_memory.ImportTextAsync("In physics, mass�energy equivalence is the relationship between mass and energy " +
-                                                   "in a system's rest frame, where the two quantities differ only by a multiplicative " +
-                                                   "constant and the units of measurement. The principle is described by the physicist " +
-                                                   "Albert Einstein's formula: E = m*c^2");
+        Console.WriteLine("Uploading text about Kernel Memory");
+        var docId = await s_memory.ImportTextAsync(
+            """
+            KM(Kernel Memory)은 RAG(Retrieval Augmented Generation), 합성 메모리, 프롬프트 엔지니어링 및 사용자 지정 시맨틱 메모리 처리를 지원하는 맞춤형 연속 데이터 하이브리드 파이프라인을 통해 데이터 세트의 효율적인 인덱싱에 특화된 다중 모드 AI 서비스입니다.
+            KM은 웹 서비스, Docker 컨테이너, ChatGPT/Copilot/Semantic Kernel용 플러그인 및 임베디드 애플리케이션용 .NET 라이브러리로 사용할 수 있습니다.
+            고급 임베딩 및 LLM을 활용하는 이 시스템은 인용 및 원본 소스에 대한 링크가 포함된 인덱싱된 데이터에서 답변을 얻기 위한 자연어 쿼리를 가능하게 합니다.
+            시맨틱 커널(Semantic Kernel), 마이크로소프트 코파일럿(Microsoft Copilot) 및 챗GPT(ChatGPT)와 플러그인으로 원활하게 통합되도록 설계된 커널 메모리는 가장 인기 있는 AI 플랫폼용으로 구축된 애플리케이션의 데이터 기반 기능을 향상시킵니다.
+            """);
         Console.WriteLine($"- Document Id: {docId}");
         s_toDelete.Add(docId);
     }
@@ -240,9 +248,9 @@ public static class WebMainProgram
     // Question without filters
     private static async Task AskSimpleQuestionStreamingTheAnswer()
     {
-        var question = "What's E = m*c^2?";
+        var question = "커널메모리가 뭔데?";
         Console.WriteLine($"Question: {question}");
-        Console.WriteLine("Expected result: formula explanation using the information loaded");
+        Console.WriteLine("Expected result: KM(Kernel Memory)은 RAG(Retrieval Augmented Generation), 합성 메모리, 프롬프트 엔지니어링 및 사용자 지정 시맨틱 메모리 처리를 지원하는 맞춤형 연속 데이터 하이브리드 파이프라인을 통해 데이터 세트의 효율적인 인덱싱에 특화된 다중 모드 AI 서비스입니다.");
 
         Console.Write("\nAnswer: ");
         var tokenUsage = new List<TokenUsage>();
@@ -282,7 +290,7 @@ public static class WebMainProgram
         Expected result: formula explanation using the information loaded
 
         Answer: E = m*c^2 is a formula derived by the physicist Albert Einstein, which describes the principle of
-        mass�energy equivalence. In this equation, E represents energy, m represents mass, and c represents the
+        mass–energy equivalence. In this equation, E represents energy, m represents mass, and c represents the
         speed of light in a vacuum (approximately 3 x 10^8 meters per second). The formula indicates that mass and
         energy are interchangeable; they are different forms of the same thing and can be converted into each other.
         This principle is fundamental in physics and has significant implications in various fields, including nuclear
@@ -456,7 +464,7 @@ public static class WebMainProgram
 
             NASA, along with the U.S. Navy and the U.S. Air Force, is currently conducting the first in a series of tests in the Pacific Ocean to demonstrate and
             evaluate the processes, procedures, and hardware for recovery operations for crewed Artemis missions. These tests are crucial for preparing the team
-            for Artemis II, which will be NASA�s first crewed mission under the Artemis program. Artemis II aims to send four astronauts in the Orion spacecraft
+            for Artemis II, which will be NASA’s first crewed mission under the Artemis program. Artemis II aims to send four astronauts in the Orion spacecraft
             around the Moon to check out systems ahead of future lunar missions.
 
             The crew for Artemis II includes NASA astronauts Reid Wiseman, Victor Glover, and Christina Koch, as well as CSA (Canadian Space Agency) astronaut
