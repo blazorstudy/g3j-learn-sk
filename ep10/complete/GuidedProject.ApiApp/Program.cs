@@ -27,9 +27,6 @@ builder.Services.AddSingleton<Kernel>(sp =>
 
     var openAIClient = sp.GetRequiredService<OpenAIClient>();
     var ollamaClient = sp.GetRequiredService<IOllamaApiClient>();
-    // var client = new OpenAIClient(
-    //     credential: new ApiKeyCredential(config["GitHub:Models:AccessToken"]!),
-    //     options: new OpenAIClientOptions { Endpoint = new Uri(config["GitHub:Models:Endpoint"]!) });
 
     var kernel = Kernel.CreateBuilder()
                        .AddOpenAIChatCompletion(
