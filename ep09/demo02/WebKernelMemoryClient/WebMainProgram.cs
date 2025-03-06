@@ -32,7 +32,7 @@ public static class WebMainProgram
         // await StoreWithCustomPipeline();
         // await StoreImage();
         // await StoreExcel();
-        // await StoreJson();
+        await StoreJson();
         Console.WriteLine("\n====================================\n");
 
         // Wait for remote ingestion pipelines to complete
@@ -50,14 +50,14 @@ public static class WebMainProgram
         // =======================
 
         await AskSimpleQuestionStreamingTheAnswer();
-        // await AskSimpleQuestionStreamingAndShowSources();
+        await AskSimpleQuestionStreamingAndShowSources();
         // await AskQuestionAboutImageContent();
         // await AskQuestionUsingFilter();
         // await AskQuestionsFilteringByUser();
         // await AskQuestionsFilteringByTypeTag();
         // await AskQuestionsAboutExcelData();
-        // await AskQuestionsAboutJsonFile();
-        // await DownloadFile();
+        await AskQuestionsAboutJsonFile();
+        await DownloadFile();
 
         // =======================
         // === PURGE =============
@@ -534,9 +534,9 @@ public static class WebMainProgram
 
     private static async Task AskQuestionsAboutJsonFile()
     {
-        var question = "What authentication mechanisms can I use with Azure Embeddings?";
+        var question = " Azure 임베딩에 어떤 인증 메커니즘을 사용할 수 있나요?";
         Console.WriteLine($"Question: {question}");
-        Console.WriteLine($"Expected result: you can use either an API Key or Azure Identity");
+        Console.WriteLine($"Expected result: API 키 또는 Azure Identity를 사용할 수 있습니다.");
 
         var answer = await s_memory.AskAsync(question, filter: MemoryFilters.ByDocument("json01"));
         Console.WriteLine($"\nAnswer: {answer.Result}");
