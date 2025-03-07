@@ -17,7 +17,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddScoped<IKernelService, KernelService>();
 
 builder.AddAzureOpenAIClient("openai");
-builder.AddKeyedOllamaApiClient("ollama-phi4");
+builder.AddKeyedOllamaApiClient("ollama-phi4-mini");
 builder.AddKeyedOllamaApiClient("exaone");
 
 builder.Services.AddSingleton<Kernel>(sp =>
@@ -25,7 +25,7 @@ builder.Services.AddSingleton<Kernel>(sp =>
     var config = builder.Configuration;
 
     var openAIClient = sp.GetRequiredService<OpenAIClient>();
-    var ollamaClient = sp.GetRequiredKeyedService<IOllamaApiClient>("ollama-phi4");
+    var ollamaClient = sp.GetRequiredKeyedService<IOllamaApiClient>("ollama-phi4-mini");
     var hfaceClient = sp.GetRequiredKeyedService<IOllamaApiClient>("exaone");
 
     var kernel = Kernel.CreateBuilder()
