@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <UserSecretsId>4e9f44f3-4a58-4803-bc61-700135e102ce</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>SKEXP0001;SKEXP0070;SKEXP0110</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Azure.AI.OpenAI" Version="9.*-*" />
+    <PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" Version="9.*" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.*" />
+    <PackageReference Include="Microsoft.KernelMemory.Service.AspNetCore" Version="0.97.250211.1" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.*" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.Ollama" Version="1.*-*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GuidedProject.ServiceDefaults\GuidedProject.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+</Project>
