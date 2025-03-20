@@ -42,17 +42,16 @@
                 <!-- Input Footer -->
                 <div class="card-footer">
                     <div class="input-group mb-2">
-                        <input class="form-control" placeholder="Resume Link" @bind="ResumeLink" />
-                        <button class="btn btn-primary" @onclick="@(() => Chat.UpdateMemoryFromWeb("resume", ResumeLink))">Send</button>
+                        <input class="form-control" placeholder="Type your message..." @bind="UserMessage" @bind:event="oninput" @onkeydown="OnKeyDownAsync" />
+                        <button class="btn btn-primary" @onclick="SendMessageAsync" disabled="@(IsReady ? null : true)">Send</button>
                     </div>
                     <div class="input-group mb-2">
-                        <input class="form-control" placeholder="Job Posting" @bind="JobPosting" />
-                        <button class="btn btn-primary" @onclick="@(() => Chat.UpdateMemoryFromText("apply", JobPosting))">Send</button>
+                        <input class="form-control" placeholder="Enter resume link..." @bind="ResumeLink" />
                     </div>
-                    <div class="input-group">
-                        <input class="form-control" placeholder="Type your message..." @bind="UserMessage" @bind:event="oninput" @onkeydown="OnKeyDownAsync" />
-                        <button class="btn btn-primary" @onclick="SendMessageAsync">Send</button>
+                    <div class="input-group mb-2">
+                        <input class="form-control" placeholder="Enter job posting..." @bind="JobPosting" />
                     </div>
+                    <button class="btn btn-success" @onclick="SubmitDetailsAsync">Submit Details</button>
                 </div>
             </div>
         </div>
@@ -66,6 +65,7 @@
     protected string UserMessage = string.Empty;
     protected string ResumeLink = string.Empty;
     protected string JobPosting = string.Empty;
+    protected bool IsReady = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -115,5 +115,20 @@
         }
 
         await this.SendMessageAsync();
+    }
+
+    protected async Task SubmitDetailsAsync()
+    {
+        IsReady = false;
+
+        // Handle the submission of ResumeLink and JobPosting
+        if (!string.IsNullOrWhiteSpace(ResumeLink) && !string.IsNullOrWhiteSpace(JobPosting))
+        {
+            await Task.WhenAll(
+                Chat.UpdateMemoryFromWeb("Resume", ResumeLink),
+                Chat.UpdateMemoryFromText("Apply", JobPosting));
+        }
+
+        IsReady = true;
     }
 }

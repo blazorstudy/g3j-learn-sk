@@ -11,7 +11,7 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-builder.Services.AddSingleton<MemoryWebClient>(new MemoryWebClient("https://localhost:7218"));
+builder.Services.AddSingleton<MemoryWebClient>(new MemoryWebClient(Environment.GetEnvironmentVariable("services__apiapp__https__0")));
 
 builder.Services.AddHttpClient<IChatClient, ChatClient>(client =>
 {

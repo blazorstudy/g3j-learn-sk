@@ -27,7 +27,7 @@ KernelMemoryConfig config = builder.Configuration.GetSection("KernelMemory").Get
 
 builder.AddKernelMemory(x =>
 {
-    x.ConfigureDependencies(builder.Configuration).WithoutDefaultHandlers();
+    x.ConfigureDependencies(builder.Configuration);
 
     foreach (KeyValuePair<string, HandlerConfig> handlerConfig in config.Service.Handlers)
     {
@@ -36,28 +36,28 @@ builder.AddKernelMemory(x =>
 });
 
 builder.AddAzureOpenAIClient("openai");
-builder.AddKeyedOllamaApiClient("ollama-phi4-mini");
-builder.AddKeyedOllamaApiClient("exaone");
+// builder.AddKeyedOllamaApiClient("ollama-phi4-mini");
+// builder.AddKeyedOllamaApiClient("exaone");
 
 builder.Services.AddSingleton<Kernel>(sp =>
 {
     var config = builder.Configuration;
 
     var openAIClient = sp.GetRequiredService<OpenAIClient>();
-    var ollamaClient = sp.GetRequiredKeyedService<IOllamaApiClient>("ollama-phi4-mini");
-    var hfaceClient = sp.GetRequiredKeyedService<IOllamaApiClient>("exaone");
+    // var ollamaClient = sp.GetRequiredKeyedService<IOllamaApiClient>("ollama-phi4-mini");
+    // var hfaceClient = sp.GetRequiredKeyedService<IOllamaApiClient>("exaone");
 
     var kernel = Kernel.CreateBuilder()
                        .AddOpenAIChatCompletion(
                            modelId: config["GitHub:Models:ModelId"]!,
                            openAIClient: openAIClient,
                            serviceId: "github")
-                       .AddOllamaChatCompletion(
-                           ollamaClient: (OllamaApiClient)ollamaClient,
-                           serviceId: "ollama")
-                       .AddOllamaChatCompletion(
-                           ollamaClient: (OllamaApiClient)hfaceClient,
-                           serviceId: "hface")
+                       // .AddOllamaChatCompletion(
+                       //     ollamaClient: (OllamaApiClient)ollamaClient,
+                       //     serviceId: "ollama")
+                       // .AddOllamaChatCompletion(
+                       //     ollamaClient: (OllamaApiClient)hfaceClient,
+                       //     serviceId: "hface")
                        .Build();
 
     return kernel;
