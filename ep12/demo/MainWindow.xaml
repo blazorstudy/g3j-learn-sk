@@ -1,0 +1,132 @@
+﻿<Window x:Class="demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:demo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+
+        <TabControl>
+            <!--#region 재고현황 탭 -->
+            <TabItem Header="재고수량" >
+                <DockPanel LastChildFill="True">
+
+                    <Grid DockPanel.Dock="Bottom" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="8*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="ID" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="1" Text="품목이름" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="2" Text="로트번호" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="3" Text="창고" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="4" Text="수량" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+                        <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtId" />
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtItemName" />
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtLotNumber" />
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtWhsName" />
+                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtQuantity" />
+
+                        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" >
+                            <Button Content="추가" Click="btnAddStock_Click" Width="80" Margin="5" />
+                            <Button Content="삭제" Click="btnDelStock_Click" Width="80" Margin="5" />
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid  DockPanel.Dock="Bottom" x:Name="gridStocks" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding 'Id'}" />
+                            <DataGridTextColumn Header="품목이름" Binding="{Binding 'ItemName'}" />
+                            <DataGridTextColumn Header="로트번호" Binding="{Binding 'LotNumber'}" />
+                            <DataGridTextColumn Header="창고" Binding="{Binding 'WhsName'}" />
+                            <DataGridTextColumn Header="수량" Binding="{Binding 'Quantity'}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </DockPanel>
+
+            </TabItem>
+            <!--#endregion-->
+
+            <!--#region 영업현황 탭 -->
+            <TabItem Header="영업주문" >
+                <DockPanel LastChildFill="True">
+
+                    <Grid DockPanel.Dock="Bottom" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="8*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Text="ID" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="1" Text="고객이름" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="2" Text="품목이름" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="3" Text="납품수량" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <TextBlock Grid.Row="4" Text="납기일" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+                        <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtSalesOrderId" />
+                        <TextBox Grid.Row="1" Grid.Column="1" x:Name="txtSalesOrderCustName" />
+                        <TextBox Grid.Row="2" Grid.Column="1" x:Name="txtSalesOrderItemName" />
+                        <TextBox Grid.Row="3" Grid.Column="1" x:Name="txtSalesOrderQty" />
+                        <TextBox Grid.Row="4" Grid.Column="1" x:Name="txtSalesOrderDueDate" />
+
+                        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Horizontal" >
+                            <Button Content="추가" Click="btnAddSalesOrder_Click" Width="80" Margin="5"/>
+                            <Button Content="삭제" Click="btnDelSalesOrder_Click" Width="80" Margin="5"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <DataGrid  DockPanel.Dock="Bottom" x:Name="gridSales" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding 'Id'}" />
+                            <DataGridTextColumn Header="고객이름" Binding="{Binding 'CustName'}" />
+                            <DataGridTextColumn Header="품목이름" Binding="{Binding 'ItemName'}" />
+                            <DataGridTextColumn Header="납품수량" Binding="{Binding 'Quantity'}" />
+                            <DataGridTextColumn Header="납기일" Binding="{Binding 'TextDueDate'}"  />
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </DockPanel>
+
+            </TabItem>
+            <!--#endregion-->
+        </TabControl>
+        
+        <DockPanel Grid.Column="1" LastChildFill="True">
+            <Button DockPanel.Dock="Bottom" Content="Send" Click="btnSend_Click" />
+            <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1">
+                <TextBox x:Name="txtPrompt" Text="재고의 총개수는 몇개입니까?" Height="60" TextWrapping="Wrap" />
+            </Border>
+
+            <Border DockPanel.Dock="Bottom" BorderBrush="Gray" BorderThickness="1">
+                <TextBlock x:Name="txtBox" TextWrapping="Wrap"/>
+            </Border>
+        </DockPanel>
+    </Grid>
+</Window>
