@@ -1,0 +1,211 @@
+﻿@page "/chatroom/{Id}"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+@using FeedbackAgent.Services
+@using Microsoft.SemanticKernel.Agents
+@using Microsoft.SemanticKernel.Agents.Chat
+@using OpenAI
+@using Markdig
+@using Microsoft.Extensions.DependencyInjection
+@using Microsoft.SemanticKernel;
+@using Microsoft.SemanticKernel.ChatCompletion;
+@using Microsoft.SemanticKernel.Memory
+@using System.ComponentModel
+@using System.Text
+@using System.Text.Json
+@using System.ClientModel
+@using Microsoft.SemanticKernel.Connectors.OpenAI
+
+<div class="chat-container">
+    <div class="chatwindow-container">
+        <div class="chat-messages" id="chatscrollviewer">
+
+            @if (!messageExist)
+            {
+                <div style="text-align: center; margin-top: 150px; margin-bottom: 80px">
+                    <h1>💬 Feedback Agent</h1>
+                    <p style="margin-top: -10px">고객 감동 친절 봉사</p>
+                </div>
+            }
+            else
+            {
+                <div style="text-align: left; margin: 20px auto 80px auto; max-width: 700px">
+                    <h3>💬 Feedback Agent</h3>
+                </div>
+
+                @foreach (var item in messages)
+                {
+                    <div class="@item.CSS">
+                        <div class="user">@item.Username</div>
+                        <div class="msg">@((MarkupString)@item.MarkdownMessage)</div>
+                    </div>
+                }
+            }
+        </div>
+        <div class="input-container">
+            <textarea class="input-lg" @onkeydown="HandleKeyDown" placeholder="무엇을 도와드릴까요?" @bind="@input" @bind:event="oninput"></textarea>
+            <button class="btn send-button" @onclick="@(Send)">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    <div style="width:300px">
+        <div class="feedback-details">
+            <h3>Feedback Details</h3>
+
+            @if (feedback != null)
+            {
+                <p><strong>Type:</strong> @feedback.FeedbackType</p>
+                <p><strong>Suggestion Type:</strong> @feedback.SuggestionType</p>
+                <p><strong>Bug Severity:</strong> @feedback.BugSeverityType</p>
+                <p><strong>Content:</strong> @feedback.Content</p>
+                <p><strong>Email:</strong> @feedback.EmailAddress</p>
+                <p><strong>Language:</strong> @feedback.Language</p>
+                <p><strong>Translated Content:</strong> @feedback.TranslatedContent</p>
+                <p><strong>Commentary:</strong> @feedback.Commentary</p>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    List<ChatMessage> messages = [];
+
+    bool messageExist => messages.Count > 0;
+
+    bool showRecord;
+
+    Kernel? kernel;
+    string? input;
+    Feedback? feedback;
+
+    FeedbackReportService? feedbackReportService;
+    IChatCompletionService chatCompletionService;
+    ChatHistory? chatHistory;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    public async Task Load()  
+    {  
+        feedbackReportService = new FeedbackReportService();  
+        feedback = await feedbackReportService.Get(Id);  
+
+        await Task.Delay(1);  
+        messages.Clear();  
+
+        kernel = AIService.CreateKernel();  
+
+        kernel.ImportPluginFromObject(new UserGuideService());  
+
+        kernel.ImportPluginFromFunctions("HelperFunctions",
+        [    
+          kernel.CreateFunctionFromMethod((string subject, string description) =>
+         {
+             var mailtoLink = $"mailto:{feedback.EmailAddress}?subject={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(description)}";
+             JS.InvokeVoidAsync("open", mailtoLink, "_blank");
+         }, "OpenEmail", "Open Email")
+        ]);
+
+
+           chatCompletionService = kernel.Services.GetService<IChatCompletionService>();  
+           chatHistory = new ChatHistory();  
+
+           var systemMessage =  
+        $@"너는 아래 고객의 피드백으로 부터 유저에게의 안내를 도와주는 AI Assistant야.  
+
+        [Feedback]  
+    {JsonSerializer.Serialize(feedback, new JsonSerializerOptions { WriteIndented = true })}";  
+
+           chatHistory.AddSystemMessage(systemMessage);  
+       }
+
+    private void OpenEmailLink(string subject, string description)
+    {
+        var mailtoLink = $"mailto:{feedback.EmailAddress}?subject={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(description)}";
+        JS.InvokeVoidAsync("open", mailtoLink, "_blank");
+    }
+
+    private async Task Send()
+    {
+        if (string.IsNullOrEmpty(input) || chatHistory == null || kernel == null)
+            return;
+
+        var userMessage = new ChatMessage(ChatMessageRole.User, input);
+        messages.Add(userMessage);
+        chatHistory.AddUserMessage(input);
+        input = string.Empty;
+        await InvokeAsync(StateHasChanged);
+
+        var assistantMessage = new ChatMessage(ChatMessageRole.Assistant);
+        messages.Add(assistantMessage);
+
+        OpenAIPromptExecutionSettings openAIPromptExecutionSettings = new()
+            {
+                FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+            };
+
+        var result = chatCompletionService.GetStreamingChatMessageContentsAsync(chatHistory, executionSettings: openAIPromptExecutionSettings, kernel);
+        await foreach (var text in result)
+        {
+            await Task.Delay(20);
+            assistantMessage.Message += text;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    #region 2. EnterKey 입력
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        var isEnterKey = e.Key == "Enter" && !e.ShiftKey;
+        if (isEnterKey)
+            await Send();
+    }
+
+    #endregion
+
+    #region 3.js모듈 활성화
+
+    IJSObjectReference? jsmodule;
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+            jsmodule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/chat.js");
+    }
+
+    #endregion
+
+    public async Task TapWishlist()
+    {
+        showRecord = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task TapRecord()
+    {
+        showRecord = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private sealed class ApprovalTerminationStrategy : TerminationStrategy
+    {
+        public ApprovalTerminationStrategy()
+        {
+            
+        }
+
+        // 메시지에 "승인"이라는 단어가 포함되면 AgentGroupChat을 종료합니다.
+        protected override Task<bool> ShouldAgentTerminateAsync(Agent agent, IReadOnlyList<ChatMessageContent> history, CancellationToken cancellationToken)
+            => Task.FromResult((history[history.Count - 1].Content?.Contains("승인", StringComparison.OrdinalIgnoreCase) == true
+                || history[history.Count - 1].Content?.Contains("approve", StringComparison.OrdinalIgnoreCase) == true));
+    }
+}
+
+
